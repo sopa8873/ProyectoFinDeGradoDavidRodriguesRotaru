@@ -1,0 +1,67 @@
+--BORRADO DE LA BASE DE DATOS EN CASO DE QUE YA EXISTA
+DROP DATABASE IF EXISTS MTGDistrictDB;
+
+--CREACIÓN DE LA BASE DE DATOS
+CREATE DATABASE MTGDistrictDB;
+
+--DECLARAMOS QUE VAMOS A USAR LA BASE DE DATOS PARA INSERTAR LAS SIGUIENTES TABLAS Y DATOS
+USE MTGDistrictDB;
+
+
+--TABLAS__TABLAS__TABLAS__TABLAS__TABLAS__TABLAS__TABLAS--
+CREATE TABLE Usuario (
+    IDUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    NombreUsuario VARCHAR(100) NOT NULL UNIQUE,
+    EmailUsuario VARCHAR(100) NOT NULL UNIQUE,
+    PasswordUsuario VARCHAR(255) NOT NULL,
+    FechaRegistroUsuario TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Mazo (
+    IDMazo INT AUTO_INCREMENT PRIMARY KEY,
+    IDUsuario INT NOT NULL,
+    NombreMazo VARCHAR(100) NOT NULL,
+    DescripcionMazo VARCHAR(100),
+    FormatoMazo VARCHAR(20) NOT NULL,
+    FechaCreacionMazo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    VisibilidadMazo TINYINT NOT NULL,
+    VotacionesPositivasMazo VARCHAR(100) NOT NULL,
+)
+
+CREATE TABLE Carta (
+    IDCarta INT AUTO_INCREMENT PRIMARY KEY,
+    NombreCarta VARCHAR(100) NOT NULL UNIQUE,
+    ColorCarta VARCHAR(100) NOT NULL,
+    CosteManaCarta INT NOT NULL,
+    ImagenUrlCarta VARCHAR(100) NOT NULL,
+)
+
+CREATE TABLE MazoCarta (
+    IDMazo INT PRIMARY KEY,
+    IDCarta INT NOT NULL,
+    Cantidad INT NOT NULL,
+)
+
+CREATE TABLE Coleccion (
+    IDColeccion INT AUTO_INCREMENT PRIMARY KEY,
+    IDUsuario INT NOT NULL,
+    NombreColeccion VARCHAR(100) NOT NULL,
+    DescripcionColeccion VARCHAR(20) NOT NULL,
+    FechaCreacionColeccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+
+CREATE TABLE ColeccionCarta (
+    IDColeccion INT PRIMARY KEY,
+    IDCarta INT NOT NULL,
+    Cantidad INT NOT NULL,
+)
+
+
+
+
+--INSERCIÓN_DE_DATOS__INSERCIÓN_DE_DATOS__INSERCIÓN_DE_DATOS--
+INSERT INTO usuarios (nombre, email, contrasena) VALUES
+('Ana García', 'ana@example.com', 'clave123'),
+('Luis Fernández', 'luis@example.com', 'pass456'),
+('Marta López', 'marta@example.com', 'secreta789');
+
