@@ -49,7 +49,7 @@ CREATE TABLE Coleccion (
     IDColeccion INT AUTO_INCREMENT PRIMARY KEY,
     IDUsuario INT NOT NULL,
     NombreColeccion VARCHAR(100) NOT NULL,
-    DescripcionColeccion VARCHAR(20) NOT NULL,
+    DescripcionColeccion VARCHAR(255) NOT NULL,
     FechaCreacionColeccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario)
 );
@@ -77,9 +77,7 @@ INSERT INTO MazoCarta (IDMazo, IDCarta, Cantidad)
 VALUES (1, 1, 4);
 
 INSERT INTO Coleccion(IDUsuario, NombreColeccion, DescripcionColeccion)
-VALUES (1, "Coleccion1", "DescripcionColeccion")
+VALUES (1, "Coleccion1", "DescripcionColeccion");
 
-INSERT INTO ColeccionCarta (IDColecion, IDCarta, Cantidad)
+INSERT INTO ColeccionCarta (IDColeccion, IDCarta, Cantidad)
 VALUES (1, 1, 20);
-
-
