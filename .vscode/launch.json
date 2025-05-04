@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MtgdistrictApplication<mtgdistrict>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.mtgdistrict.mtgdistrict.MtgdistrictApplication",
+            "projectName": "mtgdistrict",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
