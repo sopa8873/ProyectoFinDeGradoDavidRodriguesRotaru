@@ -20,18 +20,18 @@ CREATE TABLE Mazo (
     IDMazo INT AUTO_INCREMENT PRIMARY KEY,
     IDUsuario INT NOT NULL,
     NombreMazo VARCHAR(100) NOT NULL,
-    DescripcionMazo VARCHAR(100),
+    DescripcionMazo VARCHAR(255),
     FormatoMazo VARCHAR(20) NOT NULL,
     FechaCreacionMazo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     VisibilidadMazo TINYINT NOT NULL,
-    VotacionesPositivasMazo VARCHAR(100) NOT NULL,
+    VotacionesPositivasMazo INT NOT NULL,
     FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario)
 );
 
 CREATE TABLE Carta (
     IDCarta INT AUTO_INCREMENT PRIMARY KEY,
     NombreCarta VARCHAR(100) NOT NULL UNIQUE,
-    ColorCarta VARCHAR(100) NOT NULL,
+    ColorCarta VARCHAR(20) NOT NULL,
     CosteManaCarta INT NOT NULL,
     ImagenUrlCarta VARCHAR(100) NOT NULL
 );
