@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mazo {
+public class Mazo extends Entidad{
     @Id
     @Column(name = "IDMazo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

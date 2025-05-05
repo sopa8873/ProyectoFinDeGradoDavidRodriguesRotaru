@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Coleccion")
-public class Coleccion {
+public class Coleccion extends Entidad{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
