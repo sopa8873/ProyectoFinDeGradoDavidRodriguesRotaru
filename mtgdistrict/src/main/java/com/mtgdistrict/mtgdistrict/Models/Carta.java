@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Carta {
+public class Carta extends Entidad{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

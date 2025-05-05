@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario{
+public class Usuario extends Entidad{
 
     @Id
     @Column(name = "IDUsuario")
