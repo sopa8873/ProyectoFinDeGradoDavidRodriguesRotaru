@@ -21,4 +21,11 @@ public class UsuarioController {
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         return ResponseEntity.ok(servicioUsuario.findAll());
     }
+
+    @GetMapping("/id")
+    public ResponseEntity<Usuario> getUsuarioById(){
+        return null;
+    }
 }
+
+
