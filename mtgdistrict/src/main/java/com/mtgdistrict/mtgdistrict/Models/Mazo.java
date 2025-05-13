@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mazo extends Entidad{
+public class Mazo{
     @Id
     @Column(name = "IDMazo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "IDUsuario", nullable = false)

@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Coleccion")
-public class Coleccion extends Entidad{
+public class Coleccion{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDColeccion")
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "IDUsuario", nullable = false)

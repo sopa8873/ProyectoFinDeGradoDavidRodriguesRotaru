@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Carta extends Entidad{
+public class Carta{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDCarta")
-    private Integer id;
+    private Long id;
 
     @Column(name = "NombreCarta", nullable = false, unique = true)
     private String nombreCarta;

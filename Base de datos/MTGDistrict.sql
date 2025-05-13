@@ -9,7 +9,7 @@ USE MTGDistrictDB;
 
 -- TABLAS
 CREATE TABLE Usuario (
-    IDUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    IDUsuario BIGINT AUTO_INCREMENT PRIMARY KEY,
     NombreUsuario VARCHAR(100) NOT NULL UNIQUE,
     EmailUsuario VARCHAR(100) NOT NULL UNIQUE,
     PasswordUsuario VARCHAR(255) NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Mazo (
-    IDMazo INT AUTO_INCREMENT PRIMARY KEY,
-    IDUsuario INT NOT NULL,
+    IDMazo BIGINT AUTO_INCREMENT PRIMARY KEY,
+    IDUsuario BIGINT NOT NULL,
     NombreMazo VARCHAR(100) NOT NULL,
     DescripcionMazo VARCHAR(255),
     FormatoMazo VARCHAR(20) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE Mazo (
 );
 
 CREATE TABLE Carta (
-    IDCarta INT AUTO_INCREMENT PRIMARY KEY,
+    IDCarta BIGINT AUTO_INCREMENT PRIMARY KEY,
     NombreCarta VARCHAR(100) NOT NULL UNIQUE,
     ColorCarta VARCHAR(20) NOT NULL,
     CosteManaCarta INT NOT NULL,
@@ -37,8 +37,8 @@ CREATE TABLE Carta (
 );
 
 CREATE TABLE MazoCarta (
-    IDMazo INT NOT NULL,
-    IDCarta INT NOT NULL,
+    IDMazo BIGINT NOT NULL,
+    IDCarta BIGINT NOT NULL,
     Cantidad INT NOT NULL,
     PRIMARY KEY (IDMazo, IDCarta),
     FOREIGN KEY (IDMazo) REFERENCES Mazo(IDMazo),
@@ -46,8 +46,8 @@ CREATE TABLE MazoCarta (
 );
 
 CREATE TABLE Coleccion (
-    IDColeccion INT AUTO_INCREMENT PRIMARY KEY,
-    IDUsuario INT NOT NULL,
+    IDColeccion BIGINT AUTO_INCREMENT PRIMARY KEY,
+    IDUsuario BIGINT NOT NULL,
     NombreColeccion VARCHAR(100) NOT NULL,
     DescripcionColeccion VARCHAR(255) NOT NULL,
     FechaCreacionColeccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -55,8 +55,8 @@ CREATE TABLE Coleccion (
 );
 
 CREATE TABLE ColeccionCarta (
-    IDColeccion INT NOT NULL,
-    IDCarta INT NOT NULL,
+    IDColeccion BIGINT NOT NULL,
+    IDCarta BIGINT NOT NULL,
     Cantidad INT NOT NULL,
     PRIMARY KEY (IDColeccion, IDCarta),
     FOREIGN KEY (IDColeccion) REFERENCES Coleccion(IDColeccion),

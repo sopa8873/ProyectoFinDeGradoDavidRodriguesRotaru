@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario extends Entidad{
+public class Usuario{
 
     @Id
     @Column(name = "IDUsuario")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     @Column(name = "NombreUsuario", nullable = false, unique = true)
     private String nombreUsuario;
