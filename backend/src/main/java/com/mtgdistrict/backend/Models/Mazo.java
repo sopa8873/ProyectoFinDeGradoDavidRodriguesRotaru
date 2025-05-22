@@ -1,4 +1,4 @@
-package com.mtgdistrict.mtgdistrict.Models;
+package com.mtgdistrict.backend.Models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

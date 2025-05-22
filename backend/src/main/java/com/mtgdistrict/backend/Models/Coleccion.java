@@ -1,5 +1,4 @@
-package com.mtgdistrict.mtgdistrict.Models;
-
+package com.mtgdistrict.backend.Models;
 
 import java.sql.Timestamp;
 import jakarta.persistence.Column;

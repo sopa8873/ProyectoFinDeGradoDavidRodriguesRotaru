@@ -1,13 +1,13 @@
-package com.mtgdistrict.mtgdistrict;
+package com.mtgdistrict.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MtgdistrictApplication {
+public class MtgDistrictBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MtgdistrictApplication.class, args);
+		SpringApplication.run(MtgDistrictBackendApplication.class, args);
 	}
 
 }

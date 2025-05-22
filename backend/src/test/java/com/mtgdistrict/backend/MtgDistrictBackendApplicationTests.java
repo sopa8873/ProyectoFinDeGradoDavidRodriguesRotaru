@@ -1,10 +1,10 @@
-package com.mtgdistrict.mtgdistrict;
+package com.mtgdistrict.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MtgdistrictApplicationTests {
+class MtgDistrictBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -2,10 +2,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MtgDistrictBackendApplication",
+            "request": "launch",
+            "mainClass": "com.mtgdistrict.backend.MtgDistrictBackendApplication",
+            "projectName": "backend"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-MtgdistrictApplication<mtgdistrict>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.mtgdistrict.mtgdistrict.MtgdistrictApplication",
+            "mainClass": "com.mtgdistrict.MtgdistrictApplication",
             "projectName": "mtgdistrict",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
