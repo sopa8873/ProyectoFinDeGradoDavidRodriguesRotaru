@@ -1,36 +1,27 @@
-package com.mtgdistrict.backend.Models;
+package com.mtgdistrict.backend.models;
 
-import java.sql.Timestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
+@Table(name = "Usuario")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Usuario{
+public class Usuario {
 
     @Id
-    @Column(name = "IDUsuario")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(name = "NombreUsuario", nullable = false, unique = true)
+    private Long idUsuario;
+
     private String nombreUsuario;
 
-    @Column(name = "EmailUsuario", nullable = false, unique = true)
     private String emailUsuario;
-    
-    @Column(name = "PasswordUsuario", nullable = false)
+
     private String passwordUsuario;
 
-    @Column(name = "FechaRegistroUsuario")
-    private Timestamp fechaRegistroUsuario;
+    @Column(insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime fechaRegistroUsuario;
 }

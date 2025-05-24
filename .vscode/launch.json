@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "BackendApplication",
+            "request": "launch",
+            "mainClass": "com.mtgdistrict.backend.BackendApplication",
+            "projectName": "backend"
+        },
+        {
+            "type": "java",
             "name": "MtgDistrictBackendApplication",
             "request": "launch",
             "mainClass": "com.mtgdistrict.backend.MtgDistrictBackendApplication",
