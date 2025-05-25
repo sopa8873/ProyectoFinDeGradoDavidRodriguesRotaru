@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.mtgdistrict.backend.models.Usuario;
 import com.mtgdistrict.backend.services.IUsuarioService;
-//import com.mtgdistrict.backend.services.UsuarioService;
 
 import java.util.List;
 
@@ -21,6 +20,7 @@ public class UsuarioController {
     // Obtener todos los usuarios
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
+        
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
