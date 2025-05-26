@@ -1,0 +1,55 @@
+package com.mtgdistrict.backend.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.mtgdistrict.backend.models.Mazo;
+import com.mtgdistrict.backend.services.IMazoService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/mazos")
+public class MazoController {
+
+    @Autowired
+    private IMazoService mazoService;
+
+    // Obtener todos los mazos
+    @GetMapping
+    public ResponseEntity<List<Mazo>> getAllMazos() {
+        
+        List<Mazo> mazos = mazoService.getAllMazos();
+        return new ResponseEntity<>(mazos, HttpStatus.OK);
+    }
+
+    // Obtener un mazo por su ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Mazo> getMazoById(@PathVariable Long id) {
+        Mazo mazo = mazoService.getMazoById(id);
+        return new ResponseEntity<>(mazo, HttpStatus.OK);
+    }
+
+    // Crear un nuevo mazo
+    @PostMapping
+    public ResponseEntity<Mazo> createMazo(@RequestBody Mazo mazo) {
+        Mazo nuevoMazo = mazoService.createMazo(mazo);
+        return new ResponseEntity<>(nuevoMazo, HttpStatus.CREATED);
+    }
+
+    // Actualizar un mazo existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Mazo> updateMazo(@PathVariable Long id, @RequestBody Mazo mazo) {
+        Mazo mazoActualizado = mazoService.updateMazo(id, mazo);
+        return new ResponseEntity<>(mazoActualizado, HttpStatus.OK);
+    }
+
+    // Eliminar un mazo por su ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMazo(@PathVariable Long id) {
+        mazoService.deleteMazo(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}

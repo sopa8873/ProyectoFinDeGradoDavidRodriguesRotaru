@@ -11,15 +11,21 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain fitlerChain(HttpSecurity http) throws Exception {
-        
-        http.authorizeHttpRequests(request->
-            request.requestMatchers("/api/usuarios/**")
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/", "/login", "/css/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/home", true)
                 .permitAll()
-                .anyRequest()
-                .authenticated()
-        )
-        .csrf(csrf -> csrf.disable());
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            );
         return http.build();
     }
 }

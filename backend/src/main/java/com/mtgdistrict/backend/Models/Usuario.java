@@ -30,9 +30,9 @@ public class Usuario {
     @Column(nullable = false, insertable = false, updatable = false)
     private Timestamp fechaRegistroUsuario = new Timestamp(System.currentTimeMillis());
 
-    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    //private List<Mazo> mazos;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Mazo> mazos;
 
-    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    //private List<Coleccion> colecciones;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Coleccion> colecciones;
 }

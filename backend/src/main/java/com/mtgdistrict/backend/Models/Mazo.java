@@ -12,7 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@NoArgsConstructor
 @Entity
 public class Mazo {
 
@@ -41,8 +46,8 @@ public class Mazo {
     @Column(nullable = false)
     private int votacionesPositivasMazo;
 
-    //@OneToMany(mappedBy = "mazo", cascade = CascadeType.ALL)
-    //private List<MazoCarta> cartas;
+    @OneToMany(mappedBy = "mazo", cascade = CascadeType.ALL)
+    private List<MazoCarta> cartas;
 
     // Getters y Setters
 }

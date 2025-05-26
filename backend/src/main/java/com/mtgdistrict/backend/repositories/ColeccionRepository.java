@@ -3,8 +3,8 @@ package com.mtgdistrict.backend.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mtgdistrict.backend.models.Carta;
+import com.mtgdistrict.backend.models.Coleccion;
 
 @Repository
-public interface CartaRepository extends JpaRepository<Carta, Long >{
+public interface ColeccionRepository extends JpaRepository<Coleccion, Long >{
 }
