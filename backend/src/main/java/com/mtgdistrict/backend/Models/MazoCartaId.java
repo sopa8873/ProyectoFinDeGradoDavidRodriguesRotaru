@@ -8,5 +8,4 @@ import lombok.Data;
 public class MazoCartaId implements Serializable {
     private Long mazo;
     private Long carta;
-    // equals() y hashCode()
 }

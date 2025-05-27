@@ -36,7 +36,7 @@ CREATE TABLE carta (
     imagen_url_carta VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE mazo_ carta (
+CREATE TABLE mazo_carta (
     id_mazo BIGINT NOT NULL,
     id_carta BIGINT NOT NULL,
     cantidad INT NOT NULL,

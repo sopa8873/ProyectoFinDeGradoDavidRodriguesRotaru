@@ -12,22 +12,22 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@Entity
 @IdClass(MazoCartaId.class)
+@Entity
 public class MazoCarta {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_mazo")
+    @JoinColumn(name = "id_mazo", referencedColumnName = "idMazo")  // referencia explícita a la PK
     private Mazo mazo;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_carta")
+    @JoinColumn(name = "id_carta", referencedColumnName = "idCarta")  // referencia explícita a la PK
     private Carta carta;
 
     @Column(nullable = false)
     private int cantidad;
 
-    // Getters y Setters
+    // getters y setters
 }
