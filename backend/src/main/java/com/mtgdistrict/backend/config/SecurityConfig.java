@@ -1,4 +1,4 @@
-package com.mtgdistrict.config;
+package com.mtgdistrict.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,4 +17,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
