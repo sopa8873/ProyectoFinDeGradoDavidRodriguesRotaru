@@ -5,6 +5,13 @@
             "name": "BackendApplication",
             "request": "launch",
             "mainClass": "com.mtgdistrict.backend.BackendApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "BackendApplication",
+            "request": "launch",
+            "mainClass": "com.mtgdistrict.backend.BackendApplication",
             "projectName": "backend"
         },
         {

@@ -37,8 +37,8 @@ public class Mazo {
     @Column(nullable = false)
     private String formatoMazo;
 
-    @Column(nullable = false)
-    private Timestamp fechaCreacionMazo = new Timestamp(System.currentTimeMillis());
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Timestamp fechaCreacionMazo;
 
     @Column(nullable = false)
     private boolean visibilidadMazo;

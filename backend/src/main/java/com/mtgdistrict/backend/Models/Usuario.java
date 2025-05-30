@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
 
+    @Column
+    private String avatarUsuario = "/images/avatars/usuario123.jpg";
+
     @Column(nullable = false, unique = true)
     private String nombreUsuario;
 
@@ -28,7 +32,7 @@ public class Usuario {
     private String passwordUsuario;
 
     @Column(nullable = false, insertable = false, updatable = false)
-    private Timestamp fechaRegistroUsuario = new Timestamp(System.currentTimeMillis());
+    private Timestamp fechaRegistroUsuario;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Mazo> mazos;
