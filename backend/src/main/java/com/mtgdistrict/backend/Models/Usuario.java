@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
 import java.sql.Timestamp;
 import java.util.List;
 
