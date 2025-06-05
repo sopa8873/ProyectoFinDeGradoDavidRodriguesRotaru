@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mazos de la Comunidad</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background: #232323;
+            color: #fff;
+        }
+        .deck-card {
+            position: relative;
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #222;
+            min-height: 200px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+        .deck-card-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.5);
+            z-index: 1;
+        }
+        .deck-card-content {
+            position: relative;
+            z-index: 2;
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .deck-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 8px #000;
+        }
+        .deck-commander {
+            font-size: 1rem;
+            color: #d1d1d1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 1px 4px #000;
+        }
+        .deck-icons {
+            margin-bottom: 0.5rem;
+        }
+        .deck-icons img {
+            width: 22px;
+            height: 22px;
+            margin-right: 2px;
+            vertical-align: middle;
+        }
+        .deck-meta {
+            font-size: 0.95rem;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .deck-meta i {
+            margin-right: 0.2rem;
+        }
+        .deck-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: #bbb;
+        }
+        .deck-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .deck-user img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+        }
+        .badge-new {
+            background: #a259ff;
+            color: #fff;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="header :: main-header"></div>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center"><i class="bi bi-people me-2"></i>Mazos de la Comunidad</h2>
+        <form class="row g-3 mb-4">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Nombre del mazo...">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option selected>Formato</option>
+                    <option>Pioneer</option>
+                    <option>Modern</option>
+                    <option>Standard</option>
+                    <option>Commander</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="Usuario creador...">
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+        </form>
+        <div class="row g-4">
+            <!-- Card 1 -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card deck-card h-100">
+                    <div class="deck-card-bg" style="background-image:url('https://cdn.cardsrealm.com/images/cartas/blb-bloomburrow/EN/crop-med/splash-lasher-73.jpeg?5062');"></div>
+                    <div class="deck-card-content">
+                        <div>
+                            <span class="deck-title">Mishra's Toy Box (UBR Artifacts)</span>
+                            <div class="deck-commander">
+                                Commander · <img src="https://via.placeholder.com/28x40?text=C" width="28" class="rounded shadow-sm me-1" alt="Comandante"> Nombre del Comandante
+                            </div>
+                            <div class="deck-icons mb-2">
+                                <img src="https://svgs.scryfall.io/card-symbols/ub.svg" alt="UB">
+                                <img src="https://svgs.scryfall.io/card-symbols/r.svg" alt="R">
+                            </div>
+                            <div class="deck-meta">
+                                <span><i class="bi bi-heart-fill text-danger"></i> 9</span>
+                                <span><i class="bi bi-eye"></i> 19</span>
+                            </div>
+                        </div>
+                        <div class="deck-footer">
+                            <span class="deck-user">
+                                <img src="https://i.pravatar.cc/32?u=zarathos" alt="ZarathosTheEvil">
+                                ZarathosTheEvil
+                            </span>
+                            <span>less than a minute ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card deck-card h-100">
+                    <div class="deck-card-bg" style="background-image:url('https://cards.scryfall.io/art_crop/front/7/7/77c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg');"></div>
+                    <div class="deck-card-content">
+                        <div>
+                            <span class="deck-title">kenrith the returned king – combo</span>
+                            <div class="deck-commander">Commander · <img src="https://cards.scryfall.io/small/front/7/7/77c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg" width="28" class="rounded shadow-sm me-1" alt="Kenrith"> Kenrith, the Returned King</div>
+                            <div class="deck-icons mb-2">
+                                <img src="https://svgs.scryfall.io/card-symbols/w.svg" alt="W">
+                                <img src="https://svgs.scryfall.io/card-symbols/u.svg" alt="U">
+                                <img src="https://svgs.scryfall.io/card-symbols/b.svg" alt="B">
+                                <img src="https://svgs.scryfall.io/card-symbols/r.svg" alt="R">
+                                <img src="https://svgs.scryfall.io/card-symbols/g.svg" alt="G">
+                            </div>
+                            <div class="deck-meta">
+                                <span><i class="bi bi-heart-fill text-danger"></i> 0</span>
+                                <span><i class="bi bi-eye"></i> 54</span>
+                            </div>
+                        </div>
+                        <div class="deck-footer">
+                            <span class="deck-user">
+                                <img src="https://i.pravatar.cc/32?u=meo_02" alt="meo_02">
+                                meo_02
+                            </span>
+                            <span>less than a minute ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card deck-card h-100">
+                    <div class="deck-card-bg" style="background-image:url('https://cards.scryfall.io/art_crop/front/1/1/11c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg');"></div>
+                    <div class="deck-card-content">
+                        <div>
+                            <span class="deck-title">rapid fire shoe laces</span>
+                            <div class="deck-commander">Commander · <img src="https://cards.scryfall.io/small/front/1/1/11c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg" width="28" class="rounded shadow-sm me-1" alt="Commander"> Seton, Krosan Protector</div>
+                            <div class="deck-icons mb-2">
+                                <img src="https://svgs.scryfall.io/card-symbols/g.svg" alt="G">
+                            </div>
+                            <div class="deck-meta">
+                                <span><i class="bi bi-heart-fill text-danger"></i> 0</span>
+                                <span><i class="bi bi-eye"></i> 26</span>
+                            </div>
+                        </div>
+                        <div class="deck-footer">
+                            <span class="deck-user">
+                                <img src="https://i.pravatar.cc/32?u=lotuslover2011" alt="lotuslover2011">
+                                lotuslover2011
+                            </span>
+                            <span>less than a minute ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Puedes añadir más cards siguiendo el mismo patrón -->
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
