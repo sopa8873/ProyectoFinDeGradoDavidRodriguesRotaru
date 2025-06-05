@@ -3,6 +3,7 @@ package com.mtgdistrict.backend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -13,10 +14,10 @@ import java.util.Map;
 public class JwtUtil {
     private final String jwtSecret = "cambia_esto_por_una_clave_secreta_de_al_menos_32_bytes_1234";
 
-    public String generateToken(String username) {
+    public String generateToken(String email) {
         long now = System.currentTimeMillis();
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", username);
+        claims.put("sub", email);
         claims.put("iat", new Date(now));
         claims.put("exp", new Date(now + 86400000)); // 1 día
 
@@ -26,17 +27,17 @@ public class JwtUtil {
             .compact();
     }
 
-    public String extractUsername(String token) {
-        Claims claims = Jwts.parserBuilder()
-            .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+    public String extractEmail(String token) {
+        Claims claims = Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
             .build()
-            .parseClaimsJws(token)
-            .getBody();
+            .parseSignedClaims(token)
+            .getPayload();
         return claims.get("sub", String.class);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()));
+        String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername()));
     }
 }

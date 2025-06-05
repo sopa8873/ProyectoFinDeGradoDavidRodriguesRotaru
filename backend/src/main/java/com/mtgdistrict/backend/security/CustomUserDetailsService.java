@@ -13,13 +13,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmailUsuario(email)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
         return User.builder()
-            .username(usuario.getUsername())
-            .password(usuario.getPassword())
-            .roles("USER") // o usa usuario.getRol() si tienes roles en tu entidad
+            .username(usuario.getEmailUsuario())
+            .password(usuario.getPasswordUsuario())
+            .roles("USER")
             .build();
     }
 }

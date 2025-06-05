@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuthRequest {
-    private String username;
-    private String password;
+    private String emailUsuario;
+    private String passwordUsuario;
     // getters y setters
 }
 

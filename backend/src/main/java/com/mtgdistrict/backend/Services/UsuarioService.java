@@ -4,6 +4,7 @@ package com.mtgdistrict.backend.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder; // Añade este import
 import org.springframework.stereotype.Service;
 
 import com.mtgdistrict.backend.models.Usuario;
@@ -14,6 +15,9 @@ public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Inyecta el PasswordEncoder
 
     @Override
     public List<Usuario> getAllUsuarios() {
@@ -28,7 +32,8 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario createUsuario(Usuario usuario) {
-        // Validations can be added here before saving
+        // Hashea la contraseña antes de guardar
+        usuario.setPasswordUsuario(passwordEncoder.encode(usuario.getPasswordUsuario()));
         return usuarioRepository.save(usuario);
     }
 
@@ -39,7 +44,11 @@ public class UsuarioService implements IUsuarioService {
 
         existingUsuario.setNombreUsuario(usuario.getNombreUsuario());
         existingUsuario.setEmailUsuario(usuario.getEmailUsuario());
-        existingUsuario.setPasswordUsuario(usuario.getPasswordUsuario());
+        // Solo hashea si la contraseña ha cambiado
+        if (!usuario.getPasswordUsuario().equals(existingUsuario.getPasswordUsuario())) {
+            existingUsuario.setPasswordUsuario(passwordEncoder.encode(usuario.getPasswordUsuario()));
+        }
+        existingUsuario.setAvatarUsuario(usuario.getAvatarUsuario());
 
         return usuarioRepository.save(existingUsuario);
     }
