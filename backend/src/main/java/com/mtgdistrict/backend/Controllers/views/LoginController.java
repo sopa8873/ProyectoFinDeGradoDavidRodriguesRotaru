@@ -8,6 +8,6 @@ public class LoginController {
 
     @GetMapping("/")
     public String login() {
-        return "login"; // devuelve login.html
+        return "login";
     }
 }

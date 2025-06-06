@@ -11,6 +11,6 @@ public class HomeController {
     @GetMapping("/homepage")
     public String homepage(Model model, Principal principal) {
         model.addAttribute("usuario", principal.getName());
-        return "homepage"; // Sin .html, Thymeleaf lo busca en /templates
+        return "homepage";
     }
 }

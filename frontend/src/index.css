@@ -1,0 +1,186 @@
+.bodyLogin {
+    background-image: url("../public/backgroundMagic2-opacity.jpg");
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.bg-seccion {
+    background-color: rgba(255, 255, 255, 0.884);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+body h1 {
+    font-family: 'Montserrat', sans-serif !important;
+    color: rgb(255, 255, 255) !important;
+    font-size: clamp(2rem, 6vw, 4rem) !important;
+    text-align: center;
+    margin: 20px 0;
+    font-weight: 900 !important;
+}
+
+h2 {
+    font-family: 'Montserrat', sans-serif !important;
+    color: white !important;
+    font-size: clamp(1.25rem, 4vw, 2.5rem) !important;
+    text-align: center; /* Opcional */
+    margin: 10px 0;
+    font-weight: 100 !important;
+}
+
+
+.deck-card {
+  position: relative;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #222;
+  min-height: 200px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.deck-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.5);
+  z-index: 1;
+}
+
+.deck-card-content {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.deck-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2px 8px #000;
+}
+
+.deck-commander {
+  font-size: 1rem;
+  color: #d1d1d1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 1px 4px #000;
+}
+
+.deck-icons {
+  margin-bottom: 0.5rem;
+}
+
+.deck-icons img {
+  width: 22px;
+  height: 22px;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+.deck-meta {
+  font-size: 0.95rem;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.deck-meta i {
+  margin-right: 0.2rem;
+}
+
+.deck-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #bbb;
+}
+
+.deck-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.deck-user img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.badge-new {
+  background: #a259ff;
+  color: #fff;
+  font-size: 0.85rem;
+  margin-right: 0.5rem;
+}
+
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
