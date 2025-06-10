@@ -30,10 +30,10 @@ function Login() {
             });
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem("jwt", data.token);
-                window.location.href = "/homepage";
+                localStorage.setItem("jwt", data.token); // Guarda el token
+                window.location.href = "/"; // Redirige al inicio o donde quieras
             } else {
-                setLoginError("Credenciales incorrectas");
+                setLoginError("Usuario o contraseña incorrectos");
             }
         } catch (err) {
             setLoginError("Error de conexión");

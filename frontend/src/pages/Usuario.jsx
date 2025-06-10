@@ -37,7 +37,7 @@ function Usuario() {
                                 <div className="card text-center shadow-sm">
                                     <div className="card-body">
                                         <img
-                                            src="../../public/uploads/avatars/default.jpg" // Cambia esta ruta por la de tu avatar
+                                            src="/public/uploads/avatars/default.jpg" // Cambia esta ruta por la de tu avatar
                                             className="rounded-circle mb-3"
                                             alt="Avatar"
                                             width="120"

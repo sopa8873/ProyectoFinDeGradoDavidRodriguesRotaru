@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 
 function Mazos() {
     const [activeTab, setActiveTab] = useState("mazos");
-    const mazos = [
-        { nombre: "Rakdos Sacrifice", formato: "Pioneer", ultima: "05/06/2025" },
-        { nombre: "Mono Green Stompy", formato: "Standard", ultima: "01/06/2025" },
-        { nombre: "Azorius Control", formato: "Modern", ultima: "28/05/2025" },
-    ];
-    const colecciones = [
-        { nombre: "Colección Principal", cartas: 350, ultima: "03/06/2025" },
-        { nombre: "Cartas Promo", cartas: 25, ultima: "20/05/2025" },
-    ];
+    const [mazos, setMazos] = useState([]);
+    const [colecciones, setColecciones] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem("jwt");
+
+            const response = await fetch("/api/mazos", {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await response.json();
+            setMazos(data.mazos);
+            setColecciones(data.colecciones);
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <>

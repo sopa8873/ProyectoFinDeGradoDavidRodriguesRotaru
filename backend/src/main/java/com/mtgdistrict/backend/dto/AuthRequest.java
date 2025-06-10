@@ -9,6 +9,5 @@ import lombok.Setter;
 public class AuthRequest {
     private String emailUsuario;
     private String passwordUsuario;
-    // getters y setters
 }
 

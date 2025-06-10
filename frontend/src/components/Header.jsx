@@ -2,6 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Header() {
+    const handleLogout = () => {
+        localStorage.removeItem("jwt");
+        window.location.href = "/login";
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
             <div className="container-fluid">
@@ -44,7 +49,7 @@ function Header() {
                                 aria-expanded="false"
                             >
                                 <img
-                                    src="../../public/uploads/avatars/default.jpg"
+                                    src="/uploads/avatars/default.jpg"
                                     alt="Avatar"
                                     className="rounded-circle me-2"
                                     width="32"
@@ -61,7 +66,7 @@ function Header() {
                                 </li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li>
-                                    <Link className="dropdown-item" to="/login">Cerrar sesión</Link>
+                                    <Link className="dropdown-item" to="/login" onClick={handleLogout}>Cerrar sesión</Link>
                                 </li>
                             </ul>
                         </li>
