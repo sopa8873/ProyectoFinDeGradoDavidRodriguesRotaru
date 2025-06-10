@@ -2,6 +2,9 @@ package com.mtgdistrict.backend.models;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +29,7 @@ public class Coleccion {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonBackReference("usuario-coleccion")
     private Usuario usuario;
 
     @Column(nullable = false)
@@ -38,6 +42,7 @@ public class Coleccion {
     private Timestamp fechaCreacionColeccion = new Timestamp(System.currentTimeMillis());
 
     @OneToMany(mappedBy = "coleccion", cascade = CascadeType.ALL)
+    @JsonManagedReference("coleccion-cartas")
     private List<ColeccionCarta> cartas;
 
     // Getters y Setters

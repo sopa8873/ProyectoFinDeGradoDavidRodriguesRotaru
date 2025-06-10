@@ -1,6 +1,9 @@
 package com.mtgdistrict.backend.models;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,9 +37,11 @@ public class Carta {
     private String imagenUrlCarta;
 
     @OneToMany(mappedBy = "carta", cascade = CascadeType.ALL)
+    @JsonManagedReference("carta-mazo")
     private List<MazoCarta> mazos;
 
     @OneToMany(mappedBy = "carta", cascade = CascadeType.ALL)
+    @JsonManagedReference("carta-coleccion")
     private List<ColeccionCarta> colecciones;
 
     // Getters y Setters

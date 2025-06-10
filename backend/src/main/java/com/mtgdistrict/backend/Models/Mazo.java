@@ -3,6 +3,9 @@ package com.mtgdistrict.backend.models;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +30,7 @@ public class Mazo {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonBackReference("usuario-mazo")
     private Usuario usuario;
 
     @Column(nullable = false)
@@ -47,6 +51,7 @@ public class Mazo {
     private int votacionesPositivasMazo;
 
     @OneToMany(mappedBy = "mazo", cascade = CascadeType.ALL)
+    @JsonManagedReference("mazo-cartas")
     private List<MazoCarta> cartas;
 
     // Getters y Setters

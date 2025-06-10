@@ -1,5 +1,7 @@
 package com.mtgdistrict.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,12 +20,14 @@ public class MazoCarta {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_mazo", referencedColumnName = "idMazo")  // referencia explícita a la PK
+    @JoinColumn(name = "id_mazo")
+    @JsonBackReference("mazo-cartas")
     private Mazo mazo;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_carta", referencedColumnName = "idCarta")  // referencia explícita a la PK
+    @JoinColumn(name = "id_carta")
+    @JsonBackReference("carta-mazo")
     private Carta carta;
 
     @Column(nullable = false)

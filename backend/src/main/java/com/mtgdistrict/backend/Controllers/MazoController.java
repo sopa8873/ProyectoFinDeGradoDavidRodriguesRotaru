@@ -9,6 +9,7 @@ import com.mtgdistrict.backend.models.Mazo;
 import com.mtgdistrict.backend.services.IMazoService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/mazos")
@@ -35,6 +36,7 @@ public class MazoController {
     // Crear un nuevo mazo
     @PostMapping
     public ResponseEntity<Mazo> createMazo(@RequestBody Mazo mazo) {
+        System.out.println("Mazo recibido: " + mazo); // Esto imprime el objeto en consola
         Mazo nuevoMazo = mazoService.createMazo(mazo);
         return new ResponseEntity<>(nuevoMazo, HttpStatus.CREATED);
     }
@@ -52,4 +54,10 @@ public class MazoController {
         mazoService.deleteMazo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/test")
+public String test(@RequestBody Map<String, Object> body) {
+    return "OK";
 }
+}
+

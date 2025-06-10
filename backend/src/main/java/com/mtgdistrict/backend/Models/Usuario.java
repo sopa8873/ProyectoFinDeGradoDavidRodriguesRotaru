@@ -1,5 +1,6 @@
 package com.mtgdistrict.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,8 +35,10 @@ public class Usuario {
     private Timestamp fechaRegistroUsuario;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference("usuario-mazo")
     private List<Mazo> mazos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference("usuario-coleccion")
     private List<Coleccion> colecciones;
 }
