@@ -38,6 +38,9 @@ public class Mazo {
 
     private String descripcionMazo;
 
+    @Column(name = "comandante_mazo")
+    private String comandanteMazo; // o Long si prefieres, según tu modelo de carta
+
     @Column(nullable = false)
     private String formatoMazo;
 

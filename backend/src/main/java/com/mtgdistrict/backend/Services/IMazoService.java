@@ -3,6 +3,7 @@ package com.mtgdistrict.backend.services;
 import java.util.List;
 
 import com.mtgdistrict.backend.models.Mazo;
+import com.mtgdistrict.backend.models.Usuario;
 
 
 public interface IMazoService {
@@ -21,4 +22,7 @@ public interface IMazoService {
 
     // Eliminar un mazo por su ID
     void deleteMazo(Long id);
+    
+    // Obtener mazos por usuario
+    List<Mazo> getMazosByUsuario(Usuario usuario);
 }

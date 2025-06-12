@@ -4,7 +4,8 @@ import BuscarMazos from "./pages/BuscarMazos";
 import Login from "./pages/Login";
 import Mazos from "./pages/Mazos";
 import Usuario from "./pages/Usuario";
-import PrivateRoute from "./components/PrivateRoute";
+import Colecciones from "./pages/Colecciones";
+import PerfilPublico from "./pages/PerfilPublico";
 
 function App() {
   return (
@@ -13,22 +14,10 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/buscar-mazos" element={<BuscarMazos />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/mazos"
-          element={
-            <PrivateRoute>
-              <Mazos />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/usuario"
-          element={
-            <PrivateRoute>
-              <Usuario />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/mazos" element={<Mazos />} />
+        <Route path="/colecciones" element={<Colecciones />} />
+        <Route path="/usuario" element={<Usuario />} />
+        <Route path="/usuario/:nombre" element={<PerfilPublico />} />
       </Routes>
     </BrowserRouter>
   );

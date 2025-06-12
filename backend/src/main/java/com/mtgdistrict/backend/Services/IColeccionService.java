@@ -1,6 +1,7 @@
 package com.mtgdistrict.backend.services;
 
 import com.mtgdistrict.backend.models.Coleccion;
+import com.mtgdistrict.backend.models.Usuario;
 import java.util.List;
 
 public interface IColeccionService {
@@ -9,4 +10,5 @@ public interface IColeccionService {
     Coleccion createColeccion(Coleccion coleccion);
     Coleccion updateColeccion(Long id, Coleccion coleccion);
     void deleteColeccion(Long id);
+    List<Coleccion> getColeccionesByUsuario(Usuario usuario);
 }

@@ -1,52 +1,53 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import axiosService from "../services/axiosService";
+import axios from "../services/axiosService";
 
-function Mazos() {
-    const [mazos, setMazos] = useState([]);
+function Colecciones() {
+    const [colecciones, setColecciones] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMazos = async () => {
+        const fetchColecciones = async () => {
             try {
-                const data = await axiosService.get("/mazos/usuario");
-                setMazos(Array.isArray(data) ? data : []);
+                const data = await axios.get("/colecciones/usuario");
+                console.log("Respuesta colecciones:", data);
+                setColecciones(Array.isArray(data) ? data : []);
             } catch (error) {
-                console.error("Error al cargar los mazos:", error);
+                console.error("Error al cargar las colecciones:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchMazos();
+        fetchColecciones();
     }, []);
 
-    if (loading) return <p className="m-3">Cargando mazos...</p>;
+    if (loading) return <p className="m-3">Cargando colecciones...</p>;
 
     return (
         <>
             <Header />
             <div className="container my-4">
-                <h2 className="mb-4">Tus Mazos</h2>
-                <button className="btn btn-success mb-3">
-                    <i className="bi bi-plus-circle"></i> Crear nuevo mazo
+                <h2 className="mb-4">Tus Colecciones</h2>
+                <button className="btn btn-primary mb-3">
+                    <i className="bi bi-plus-circle"></i> Añadir colección
                 </button>
                 <div className="table-responsive">
                     <table className="table table-hover">
-                        <thead className="table-primary">
+                        <thead className="table-info">
                             <tr>
                                 <th>Nombre</th>
-                                <th>Formato</th>
+                                <th>Nº Cartas</th>
                                 <th>Última modificación</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {mazos.map((mazo, idx) => (
+                            {colecciones.map((col, idx) => (
                                 <tr key={idx}>
-                                    <td>{mazo.nombreMazo}</td>
-                                    <td>{mazo.formatoMazo}</td>
-                                    <td>{mazo.fechaCreacionMazo}</td>
+                                    <td>{col.nombreColeccion}</td>
+                                    <td>{col.cartas ? col.cartas.length : 0}</td>
+                                    <td>{col.fechaCreacionColeccion}</td>
                                     <td>
                                         <button className="btn btn-outline-primary btn-sm me-1">
                                             <i className="bi bi-eye"></i> Ver
@@ -68,4 +69,4 @@ function Mazos() {
     );
 }
 
-export default Mazos;
+export default Colecciones;

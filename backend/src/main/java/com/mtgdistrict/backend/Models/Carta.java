@@ -1,19 +1,11 @@
 package com.mtgdistrict.backend.models;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,25 +17,37 @@ public class Carta {
     private Long idCarta;
 
     @Column(nullable = false, unique = true)
-    private String nombreCarta;
+    private String nombreCarta; // Scryfall: "name"
 
-    @Column(nullable = false)
-    private String colorCarta;
+    @Column
+    private String tipoCarta; // Scryfall: "type_line"
 
-    @Column(nullable = false)
-    private int costeManaCarta;
+    @Column
+    private String textoCarta; // Scryfall: "oracle_text"
 
-    @Column(nullable = false)
-    private String imagenUrlCarta;
+    @ElementCollection
+    @CollectionTable(name = "carta_color", joinColumns = @JoinColumn(name = "id_carta"))
+    @Column(name = "color")
+    private List<String> colorCarta = new ArrayList<>(); // Scryfall: "colors" (puedes guardar como string: "['R','G']" o como JSON/texto)
 
-    @OneToMany(mappedBy = "carta", cascade = CascadeType.ALL)
-    @JsonManagedReference("carta-mazo")
-    private List<MazoCarta> mazos;
+    @Column
+    private String costeManaCarta; // Scryfall: "mana_cost" (ej: "{1}{G}{G}")
 
-    @OneToMany(mappedBy = "carta", cascade = CascadeType.ALL)
-    @JsonManagedReference("carta-coleccion")
-    private List<ColeccionCarta> colecciones;
+    @Column
+    private Integer cmc; // Scryfall: "cmc" (coste convertido de maná)
 
-    // Getters y Setters
+    @Column
+    private String imagenUrlCarta; // Scryfall: image_uris.normal
+
+    @Column
+    private String imagenArtCropCarta; // Scryfall: image_uris.art_crop
+
+    @Column
+    private String setCarta; // Scryfall: "set_name"
+
+    @Column
+    private String rarezaCarta; // Scryfall: "rarity"
+
+    // Puedes añadir más campos según lo que uses en tu app
 }
 

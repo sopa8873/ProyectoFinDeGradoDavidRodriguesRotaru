@@ -2,6 +2,7 @@ package com.mtgdistrict.backend.services;
 
 import java.util.List;
 
+import com.mtgdistrict.backend.dto.RegisterRequest;
 import com.mtgdistrict.backend.models.Usuario;
 
 
@@ -21,4 +22,11 @@ public interface IUsuarioService {
 
     // Eliminar un usuario por su ID
     void deleteUsuario(Long id);
+
+    // Buscar usuario por email
+    Usuario findByEmail(String emailUsuario);
+
+    void createUsuarioFromRegister(RegisterRequest registerRequest);
+
+    boolean changePassword(String emailUsuario, String newPassword);
 }

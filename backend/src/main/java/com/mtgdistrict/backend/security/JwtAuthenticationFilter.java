@@ -15,7 +15,7 @@ import org.springframework.lang.NonNull; // Añade este import
 
 import java.io.IOException;
 
-//@Component
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
+        String path = request.getServletPath();
 
         // Ignora rutas públicas
         if (path.startsWith("/auth/login") || path.startsWith("/auth/register")) {
@@ -42,9 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
+        if (authHeader != null) {
+            if (authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+            } else {
+                token = authHeader;
+            }
             username = jwtUtil.extractEmail(token);
+            System.out.println("JWT username: " + username);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -53,6 +58,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("Usuario autenticado: " + username);
+            } else {
+                System.out.println("Token inválido para usuario: " + username);
             }
         }
         filterChain.doFilter(request, response);

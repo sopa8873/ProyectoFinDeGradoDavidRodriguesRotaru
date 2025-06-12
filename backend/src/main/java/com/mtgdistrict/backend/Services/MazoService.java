@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mtgdistrict.backend.models.Mazo;
+import com.mtgdistrict.backend.models.Usuario;
 import com.mtgdistrict.backend.repositories.MazoRepository;
 
 @Service
@@ -47,6 +48,11 @@ public class MazoService implements IMazoService {
         Mazo existingMazo = mazoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mazo not found with id: " + id));
         mazoRepository.delete(existingMazo);
+    }
+
+    @Override
+    public List<Mazo> getMazosByUsuario(Usuario usuario) {
+        return mazoRepository.findByUsuario(usuario);
     }
 
 }

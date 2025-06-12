@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import com.mtgdistrict.backend.models.Mazo;
 import com.mtgdistrict.backend.services.IMazoService;
 
+import org.springframework.security.core.Authentication;
+import com.mtgdistrict.backend.models.Usuario;
+import com.mtgdistrict.backend.services.IUsuarioService;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +22,20 @@ public class MazoController {
     @Autowired
     private IMazoService mazoService;
 
-    // Obtener todos los mazos
+    @Autowired
+    private IUsuarioService usuarioService;
+
     @GetMapping
     public ResponseEntity<List<Mazo>> getAllMazos() {
-        
         List<Mazo> mazos = mazoService.getAllMazos();
+        return new ResponseEntity<>(mazos, HttpStatus.OK);
+    }
+
+    @GetMapping("/usuario")
+    public ResponseEntity<List<Mazo>> getMazosByUsuario(Authentication authentication) {
+        String email = authentication.getName();
+        Usuario usuario = usuarioService.findByEmail(email);
+        List<Mazo> mazos = mazoService.getMazosByUsuario(usuario);
         return new ResponseEntity<>(mazos, HttpStatus.OK);
     }
 
@@ -56,8 +69,8 @@ public class MazoController {
     }
 
     @PostMapping("/test")
-public String test(@RequestBody Map<String, Object> body) {
-    return "OK";
-}
+    public String test(@RequestBody Map<String, Object> body) {
+        return "OK";
+    }
 }
 

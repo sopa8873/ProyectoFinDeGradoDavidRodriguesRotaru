@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
-    private final String jwtSecret = "cambia_esto_por_una_clave_secreta_de_al_menos_32_bytes_1234";
+    private final String jwtSecret = "a-string-secret-at-least-256-bits-long";
 
     public String generateToken(String email) {
         long now = System.currentTimeMillis();

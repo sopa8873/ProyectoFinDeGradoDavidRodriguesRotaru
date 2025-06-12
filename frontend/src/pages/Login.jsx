@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axiosService from "../services/axiosService";
 
 function Login() {
     const [activeTab, setActiveTab] = useState("login");
@@ -13,37 +14,41 @@ function Login() {
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
-        setLoginError("");
+        setLoginError("");  // Limpia error al cambiar pestaña
     };
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         setLoginError("");
         try {
-            const response = await fetch("/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    emailUsuario: loginEmail,
-                    passwordUsuario: loginPassword,
-                }),
+            // Aquí NO necesitas el token, solo POST
+            const data = await axiosService.post("/../auth/login", {
+                emailUsuario: loginEmail,
+                passwordUsuario: loginPassword,
             });
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem("jwt", data.token); // Guarda el token
-                window.location.href = "/"; // Redirige al inicio o donde quieras
-            } else {
-                setLoginError("Usuario o contraseña incorrectos");
-            }
+            localStorage.setItem("jwt", data.token);
+            localStorage.setItem("email", loginEmail);
+            localStorage.setItem("nombre", data.nombreUsuario);
+            window.location.href = "/";
         } catch (err) {
-            setLoginError("Error de conexión");
+            setLoginError("Usuario o contraseña incorrectos");
         }
     };
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
-        // Aquí puedes implementar el registro real
         alert("Registro enviado (implementa la lógica aquí)");
+    };
+
+    // Limpia el error login al cambiar inputs de login
+    const onLoginEmailChange = (e) => {
+        setLoginEmail(e.target.value);
+        if (loginError) setLoginError("");
+    };
+
+    const onLoginPasswordChange = (e) => {
+        setLoginPassword(e.target.value);
+        if (loginError) setLoginError("");
     };
 
     return (
@@ -54,7 +59,6 @@ function Login() {
                     <h2>Bienvenido a tu aplicación de gestión de mazos</h2>
                 </div>
                 <div className="col-12 col-md-6 offset-md-3 bg-seccion p-4 rounded shadow">
-                    {/* Navegación tipo Pills */}
                     <ul className="nav nav-pills nav-justified mb-5" id="ex1" role="tablist">
                         <li className="nav-item" role="presentation">
                             <button
@@ -81,9 +85,7 @@ function Login() {
                             </button>
                         </li>
                     </ul>
-                    {/* Contenido de las pestañas */}
                     <div className="tab-content">
-                        {/* Login */}
                         <div className={`tab-pane fade ${activeTab === "login" ? "show active" : ""}`} id="pills-login" role="tabpanel">
                             <form onSubmit={handleLoginSubmit}>
                                 <div className="form-outline mb-4">
@@ -93,7 +95,7 @@ function Login() {
                                         className="form-control"
                                         required
                                         value={loginEmail}
-                                        onChange={(e) => setLoginEmail(e.target.value)}
+                                        onChange={onLoginEmailChange}
                                     />
                                     <label className="form-label" htmlFor="emailUsuario">
                                         Email
@@ -106,14 +108,14 @@ function Login() {
                                         className="form-control"
                                         required
                                         value={loginPassword}
-                                        onChange={(e) => setLoginPassword(e.target.value)}
+                                        onChange={onLoginPasswordChange}
                                     />
                                     <label className="form-label" htmlFor="passwordUsuario">
                                         Contraseña
                                     </label>
                                 </div>
                                 <div className="row mb-4">
-                                    <div className="col-md-6 d-flex justify-content-center">
+                                    <div className="col-12 d-flex justify-content-start">
                                         <a href="#!">¿Olvidaste tu contraseña?</a>
                                     </div>
                                 </div>
@@ -125,60 +127,65 @@ function Login() {
                                 <div className="text-danger mt-2">{loginError}</div>
                             )}
                         </div>
-                        {/* Registro */}
                         <div className={`tab-pane fade ${activeTab === "register" ? "show active" : ""}`} id="pills-register" role="tabpanel">
                             <form onSubmit={handleRegisterSubmit}>
-                                <div className="form-outline mb-4">
-                                    <input
-                                        type="text"
-                                        id="registerUsername"
-                                        className="form-control"
-                                        required
-                                        value={registerUsername}
-                                        onChange={(e) => setRegisterUsername(e.target.value)}
-                                    />
-                                    <label className="form-label" htmlFor="registerUsername">
-                                        Nombre de usuario
-                                    </label>
-                                </div>
-                                <div className="form-outline mb-4">
-                                    <input
-                                        type="email"
-                                        id="registerEmail"
-                                        className="form-control"
-                                        required
-                                        value={registerEmail}
-                                        onChange={(e) => setRegisterEmail(e.target.value)}
-                                    />
-                                    <label className="form-label" htmlFor="registerEmail">
-                                        Email
-                                    </label>
-                                </div>
-                                <div className="form-outline mb-4">
-                                    <input
-                                        type="password"
-                                        id="registerPassword"
-                                        className="form-control"
-                                        required
-                                        value={registerPassword}
-                                        onChange={(e) => setRegisterPassword(e.target.value)}
-                                    />
-                                    <label className="form-label" htmlFor="registerPassword">
-                                        Contraseña
-                                    </label>
-                                </div>
-                                <div className="form-outline mb-4">
-                                    <input
-                                        type="password"
-                                        id="registerRepeatPassword"
-                                        className="form-control"
-                                        required
-                                        value={registerRepeatPassword}
-                                        onChange={(e) => setRegisterRepeatPassword(e.target.value)}
-                                    />
-                                    <label className="form-label" htmlFor="registerRepeatPassword">
-                                        Repite la contraseña
-                                    </label>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-outline mb-4">
+                                            <input
+                                                type="text"
+                                                id="registerUsername"
+                                                className="form-control"
+                                                required
+                                                value={registerUsername}
+                                                onChange={(e) => setRegisterUsername(e.target.value)}
+                                            />
+                                            <label className="form-label" htmlFor="registerUsername">
+                                                Nombre de usuario
+                                            </label>
+                                        </div>
+                                        <div className="form-outline mb-4">
+                                            <input
+                                                type="email"
+                                                id="registerEmail"
+                                                className="form-control"
+                                                required
+                                                value={registerEmail}
+                                                onChange={(e) => setRegisterEmail(e.target.value)}
+                                            />
+                                            <label className="form-label" htmlFor="registerEmail">
+                                                Email
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-outline mb-4">
+                                            <input
+                                                type="password"
+                                                id="registerPassword"
+                                                className="form-control"
+                                                required
+                                                value={registerPassword}
+                                                onChange={(e) => setRegisterPassword(e.target.value)}
+                                            />
+                                            <label className="form-label" htmlFor="registerPassword">
+                                                Contraseña
+                                            </label>
+                                        </div>
+                                        <div className="form-outline mb-4">
+                                            <input
+                                                type="password"
+                                                id="registerRepeatPassword"
+                                                className="form-control"
+                                                required
+                                                value={registerRepeatPassword}
+                                                onChange={(e) => setRegisterRepeatPassword(e.target.value)}
+                                            />
+                                            <label className="form-label" htmlFor="registerRepeatPassword">
+                                                Repite la contraseña
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="form-check d-flex justify-content-center mb-4">
                                     <input

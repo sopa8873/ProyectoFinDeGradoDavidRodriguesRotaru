@@ -1,29 +1,91 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
+import axiosService from "../services/axiosService";
 
 function BuscarMazos() {
+    // Estados para inputs
+    const [nombreMazo, setNombreMazo] = useState("");
+    const [formato, setFormato] = useState("");
+    const [usuario, setUsuario] = useState("");
+    // Estado para resultados filtrados
+    const [resultados, setResultados] = useState([]);
+    const [mazosData, setMazosData] = useState([]); // <-- Nuevo estado
+
+    // Cargar todos los mazos al montar
+    useEffect(() => {
+        const fetchMazos = async () => {
+            try {
+                const data = await axiosService.get("/mazos");
+                setMazosData(data);
+                setResultados(data);
+            } catch (error) {
+                setMazosData([]);
+                setResultados([]);
+                console.error("Error al cargar los mazos:", error);
+            }
+        };
+        fetchMazos();
+    }, []);
+
+    // Manejar submit del formulario
+    const handleBuscar = (e) => {
+        e.preventDefault();
+        // Filtrar mazos según inputs (mayúsculas y minúsculas ignoradas)
+        const filtered = mazosData.filter((mazo) => {
+            const nombreMatch = mazo.titulo
+                .toLowerCase()
+                .includes(nombreMazo.toLowerCase());
+            const formatoMatch =
+                formato === "" || formato === "Formato"
+                    ? true
+                    : mazo.formato.toLowerCase() === formato.toLowerCase();
+            const usuarioMatch = mazo.usuario
+                .toLowerCase()
+                .includes(usuario.toLowerCase());
+
+            return nombreMatch && formatoMatch && usuarioMatch;
+        });
+        setResultados(filtered);
+    };
+
     return (
         <>
-            <Header/>
+            <Header />
             <div className="container mt-5">
                 <h2 className="mb-4 text-center">
                     <i className="bi bi-people me-2"></i>Mazos de la Comunidad
                 </h2>
-                <form className="row g-3 mb-4">
+                <form className="row g-3 mb-4" onSubmit={handleBuscar}>
                     <div className="col-md-4">
-                        <input type="text" className="form-control" placeholder="Nombre del mazo..." />
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Nombre del mazo..."
+                            value={nombreMazo}
+                            onChange={(e) => setNombreMazo(e.target.value)}
+                        />
                     </div>
                     <div className="col-md-3">
-                        <select className="form-select">
-                            <option defaultValue>Formato</option>
-                            <option>Pioneer</option>
-                            <option>Modern</option>
-                            <option>Standard</option>
-                            <option>Commander</option>
+                        <select
+                            className="form-select"
+                            value={formato}
+                            onChange={(e) => setFormato(e.target.value)}
+                        >
+                            <option value="">Formato</option>
+                            <option value="Pioneer">Pioneer</option>
+                            <option value="Modern">Modern</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Commander">Commander</option>
                         </select>
                     </div>
                     <div className="col-md-3">
-                        <input type="text" className="form-control" placeholder="Usuario creador..." />
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Usuario creador..."
+                            value={usuario}
+                            onChange={(e) => setUsuario(e.target.value)}
+                        />
                     </div>
                     <div className="col-md-2 d-grid">
                         <button type="submit" className="btn btn-primary">
@@ -31,148 +93,61 @@ function BuscarMazos() {
                         </button>
                     </div>
                 </form>
+
                 <div className="row g-4">
-                    {/* Card 1 */}
-                    <div className="col-12 col-md-6 col-lg-4">
-                        <div className="card deck-card h-100">
-                            <div
-                                className="deck-card-bg"
-                                style={{
-                                    backgroundImage:
-                                        "url('https://cdn.cardsrealm.com/images/cartas/blb-bloomburrow/EN/crop-med/splash-lasher-73.jpeg?5062')",
-                                }}
-                            ></div>
-                            <div className="deck-card-content">
-                                <div>
-                                    <span className="deck-title">Mishra's Toy Box (UBR Artifacts)</span>
-                                    <div className="deck-commander">
-                                        Commander ·{" "}
-                                        <img
-                                            src="https://via.placeholder.com/28x40?text=C"
-                                            width="28"
-                                            className="rounded shadow-sm me-1"
-                                            alt="Comandante"
-                                        />{" "}
-                                        Nombre del Comandante
+                    {resultados.length > 0 ? (
+                        resultados.map((mazo) => (
+                            <div key={mazo.id} className="col-12 col-md-6 col-lg-4">
+                                <div className="card deck-card h-100">
+                                    <div
+                                        className="deck-card-bg"
+                                        style={{ backgroundImage: `url('${mazo.imagenFondo}')` }}
+                                    ></div>
+                                    <div className="deck-card-content">
+                                        <div>
+                                            <span className="deck-title">{mazo.titulo}</span>
+                                            <div className="deck-commander">
+                                                Commander ·{" "}
+                                                <img
+                                                    src={mazo.comandanteImg}
+                                                    width="28"
+                                                    className="rounded shadow-sm me-1"
+                                                    alt="Comandante"
+                                                />{" "}
+                                                {mazo.comandanteNombre}
+                                            </div>
+                                            <div className="deck-icons mb-2">
+                                                {(mazo.colores || []).map((color) => (
+                                                    <img
+                                                        key={color}
+                                                        src={`https://svgs.scryfall.io/card-symbols/${color}.svg`}
+                                                        alt={color.toUpperCase()}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <div className="deck-meta">
+                                                <span>
+                                                    <i className="bi bi-heart-fill text-danger"></i> {mazo.likes}
+                                                </span>
+                                                <span>
+                                                    <i className="bi bi-eye"></i> {mazo.views}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="deck-footer">
+                                            <span className="deck-user">
+                                                <img src={mazo.usuarioImg} alt={mazo.usuario} />
+                                                {mazo.usuario}
+                                            </span>
+                                            <span>{mazo.fecha}</span>
+                                        </div>
                                     </div>
-                                    <div className="deck-icons mb-2">
-                                        <img src="https://svgs.scryfall.io/card-symbols/ub.svg" alt="UB" />
-                                        <img src="https://svgs.scryfall.io/card-symbols/r.svg" alt="R" />
-                                    </div>
-                                    <div className="deck-meta">
-                                        <span>
-                                            <i className="bi bi-heart-fill text-danger"></i> 9
-                                        </span>
-                                        <span>
-                                            <i className="bi bi-eye"></i> 19
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="deck-footer">
-                                    <span className="deck-user">
-                                        <img src="https://i.pravatar.cc/32?u=zarathos" alt="ZarathosTheEvil" />
-                                        ZarathosTheEvil
-                                    </span>
-                                    <span>less than a minute ago</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    {/* Card 2 */}
-                    <div className="col-12 col-md-6 col-lg-4">
-                        <div className="card deck-card h-100">
-                            <div
-                                className="deck-card-bg"
-                                style={{
-                                    backgroundImage:
-                                        "url('https://cards.scryfall.io/art_crop/front/7/7/77c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg')",
-                                }}
-                            ></div>
-                            <div className="deck-card-content">
-                                <div>
-                                    <span className="deck-title">kenrith the returned king – combo</span>
-                                    <div className="deck-commander">
-                                        Commander ·{" "}
-                                        <img
-                                            src="https://cards.scryfall.io/small/front/7/7/77c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg"
-                                            width="28"
-                                            className="rounded shadow-sm me-1"
-                                            alt="Kenrith"
-                                        />{" "}
-                                        Kenrith, the Returned King
-                                    </div>
-                                    <div className="deck-icons mb-2">
-                                        <img src="https://svgs.scryfall.io/card-symbols/w.svg" alt="W" />
-                                        <img src="https://svgs.scryfall.io/card-symbols/u.svg" alt="U" />
-                                        <img src="https://svgs.scryfall.io/card-symbols/b.svg" alt="B" />
-                                        <img src="https://svgs.scryfall.io/card-symbols/r.svg" alt="R" />
-                                        <img src="https://svgs.scryfall.io/card-symbols/g.svg" alt="G" />
-                                    </div>
-                                    <div className="deck-meta">
-                                        <span>
-                                            <i className="bi bi-heart-fill text-danger"></i> 0
-                                        </span>
-                                        <span>
-                                            <i className="bi bi-eye"></i> 54
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="deck-footer">
-                                    <span className="deck-user">
-                                        <img src="https://i.pravatar.cc/32?u=meo_02" alt="meo_02" />
-                                        meo_02
-                                    </span>
-                                    <span>less than a minute ago</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Card 3 */}
-                    <div className="col-12 col-md-6 col-lg-4">
-                        <div className="card deck-card h-100">
-                            <div
-                                className="deck-card-bg"
-                                style={{
-                                    backgroundImage:
-                                        "url('https://cards.scryfall.io/art_crop/front/1/1/11c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg')",
-                                }}
-                            ></div>
-                            <div className="deck-card-content">
-                                <div>
-                                    <span className="deck-title">rapid fire shoe laces</span>
-                                    <div className="deck-commander">
-                                        Commander ·{" "}
-                                        <img
-                                            src="https://cards.scryfall.io/small/front/1/1/11c8e3c7-8e7b-4e7c-8e7b-7e7c8e7b7e7c.jpg"
-                                            width="28"
-                                            className="rounded shadow-sm me-1"
-                                            alt="Commander"
-                                        />{" "}
-                                        Seton, Krosan Protector
-                                    </div>
-                                    <div className="deck-icons mb-2">
-                                        <img src="https://svgs.scryfall.io/card-symbols/g.svg" alt="G" />
-                                    </div>
-                                    <div className="deck-meta">
-                                        <span>
-                                            <i className="bi bi-heart-fill text-danger"></i> 0
-                                        </span>
-                                        <span>
-                                            <i className="bi bi-eye"></i> 26
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="deck-footer">
-                                    <span className="deck-user">
-                                        <img src="https://i.pravatar.cc/32?u=lotuslover2011" alt="lotuslover2011" />
-                                        lotuslover2011
-                                    </span>
-                                    <span>less than a minute ago</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Puedes añadir más cards siguiendo el mismo patrón */}
+                        ))
+                    ) : (
+                        <p className="text-center">No se encontraron mazos con esos criterios.</p>
+                    )}
                 </div>
             </div>
         </>

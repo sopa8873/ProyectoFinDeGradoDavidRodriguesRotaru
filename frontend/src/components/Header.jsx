@@ -1,16 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
+    const navigate = useNavigate();
+    const email = localStorage.getItem("nombreUsuario");
+
     const handleLogout = () => {
         localStorage.removeItem("jwt");
-        window.location.href = "/login";
+        localStorage.removeItem("email");
+        localStorage.removeItem("nombreUsuario");
+        navigate("/login");
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav
+            className="navbar navbar-expand-lg navbar-dark"
+            style={{ backgroundColor: "var(--paynes-gray)", color: "var(--bole)" }}
+        >
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/">MTGDistrict</Link>
+                <Link
+                    className="navbar-brand"
+                    to="/"
+                    style={{ color: "var(--bone)", fontWeight: "bold" }}
+                >
+                    MTGDistrict
+                </Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -19,25 +33,31 @@ function Header() {
                     aria-controls="navbarNav"
                     aria-expanded="false"
                     aria-label="Toggle navigation"
+                    style={{ borderColor: "var(--bone)" }}
                 >
-                    <span className="navbar-toggler-icon"></span>
+                    <span
+                        className="navbar-toggler-icon"
+                        style={{ filter: "invert(40%) sepia(15%) saturate(500%) hue-rotate(160deg)" }}
+                    ></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav me-auto">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/">Inicio</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/buscar-mazos">Buscar Mazos</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/mazos">Mazos</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/usuario">Usuario</Link>
-                        </li>
+                        {["Inicio", "Buscar Mazos", "Mis Mazos", "Mis Colecciones"].map((text, idx) => {
+                            const toPaths = ["/", "/buscar-mazos", "/mazos", "/colecciones"];
+                            return (
+                                <li key={idx} className="nav-item">
+                                    <Link
+                                        className="nav-link"
+                                        to={toPaths[idx]}
+                                        style={{ color: "var(--bone)" }}
+                                    >
+                                        {text}
+                                    </Link>
+                                </li>
+                            );
+                        })}
                     </ul>
-                    {/* Avatar y menú de usuario */}
+
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item dropdown">
                             <a
@@ -47,6 +67,7 @@ function Header() {
                                 role="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
+                                style={{ color: "var(--bole)" }}
                             >
                                 <img
                                     src="/uploads/avatars/default.jpg"
@@ -54,19 +75,32 @@ function Header() {
                                     className="rounded-circle me-2"
                                     width="32"
                                     height="32"
+                                    style={{ border: "1px solid var(--paynes-gray)" }}
                                 />
-                                Usuario
+                                {email ? email : "Usuario"}
                             </a>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <ul
+                                className="dropdown-menu dropdown-menu-end"
+                                aria-labelledby="userDropdown"
+                                style={{ backgroundColor: "var(--zomp)", color: "var(--bole)" }}
+                            >
                                 <li>
-                                    <Link className="dropdown-item" to="/usuario">Perfil</Link>
+                                    <Link className="dropdown-item" to={`/usuario/${email}`}>
+                                        Perfil
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a className="dropdown-item" to="/usuario">Configuración</a>
+                                    <Link className="dropdown-item" to="/usuario">
+                                        Configuración
+                                    </Link>
                                 </li>
-                                <li><hr className="dropdown-divider" /></li>
                                 <li>
-                                    <Link className="dropdown-item" to="/login" onClick={handleLogout}>Cerrar sesión</Link>
+                                    <hr className="dropdown-divider" />
+                                </li>
+                                <li>
+                                    <button className="dropdown-item" onClick={handleLogout}>
+                                        Cerrar sesión
+                                    </button>
                                 </li>
                             </ul>
                         </li>

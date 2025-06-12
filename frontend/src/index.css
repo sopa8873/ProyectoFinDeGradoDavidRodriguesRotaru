@@ -1,3 +1,12 @@
+:root {
+  --paynes-gray: #476a6f;
+  --zomp: #519e8a;
+  --seasalt: #fbfaf8;
+  --bone: #e7decd;
+  --bole: #804e49;
+}
+
+
 .bodyLogin {
     background-image: url("../public/backgroundMagic2-opacity.jpg");
     min-height: 100vh;

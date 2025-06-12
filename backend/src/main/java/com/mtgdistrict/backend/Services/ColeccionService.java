@@ -1,6 +1,7 @@
 package com.mtgdistrict.backend.services;
 
 import com.mtgdistrict.backend.models.Coleccion;
+import com.mtgdistrict.backend.models.Usuario;
 import com.mtgdistrict.backend.repositories.ColeccionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,10 @@ public class ColeccionService implements IColeccionService {
     @Override
     public void deleteColeccion(Long id) {
         coleccionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Coleccion> getColeccionesByUsuario(Usuario usuario) {
+        return coleccionRepository.findByUsuario(usuario);
     }
 }
