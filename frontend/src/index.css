@@ -46,6 +46,15 @@ h2 {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
+.deck-card-fixed {
+  min-height: 220px;
+  max-height: 220px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .deck-card-bg {
   position: absolute;
   inset: 0;
@@ -240,4 +249,54 @@ button:focus-visible {
 
 .page-root > main {
   flex: 1;
+}
+
+.usuario-glass-hover {
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.usuario-glass-hover:hover {
+  transform: scale(1.025);
+  box-shadow: 0 12px 40px 0 rgba(31,38,135,0.45);
+}
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+.avatar-img-fade { opacity: 1; transition: opacity 0.5s; }
+
+.mazo-search-bar {
+  animation: glassFadeIn 0.7s cubic-bezier(.4,2,.6,1) 1;
+}
+@keyframes glassFadeIn {
+  from { opacity: 0; transform: translateY(-32px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.mazo-search-input:focus {
+  border: 2px solid #00e6ff !important;
+  box-shadow: 0 0 0 3px #00e6ff33 !important;
+  background: rgba(255,255,255,0.18) !important;
+}
+.mazo-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #00e6ff;
+  font-size: 1.3rem;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 2;
+}
+.btn-gradient-magic:hover, .btn-gradient-magic:focus {
+  background: linear-gradient(90deg, #5f7fff 0%, #00e6ff 100%);
+  box-shadow: 0 8px 32px #00e6ff77, 0 1.5px 0 #fff;
+}
+.mazo-search-hero-input:focus {
+  box-shadow: 0 0 0 4px #00e6ff33 !important;
+  background: rgba(255,255,255,0.22) !important;
+}
+.mazo-search-hero-btn:hover, .mazo-search-hero-btn:focus {
+  background: linear-gradient(90deg, #5f7fff 0%, #00e6ff 100%);
+  box-shadow: 0 8px 32px #00e6ff77, 0 1.5px 0 #fff;
 }

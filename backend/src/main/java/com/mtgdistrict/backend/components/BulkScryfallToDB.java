@@ -35,7 +35,7 @@ public class BulkScryfallToDB {
         try (InputStream input = new FileInputStream(FILE_NAME)) {
             MappingIterator<Map<String, Object>> it = mapper.readerFor(Map.class).readValues(input);
             int count = 0;
-            while (it.hasNext() && count < 1000) {
+            while (it.hasNext() && count < 100) {
                 Map<String, Object> carta = it.next();
                 if (!"es".equals(carta.get("lang"))) continue;
 
@@ -71,7 +71,7 @@ public class BulkScryfallToDB {
 
                 cartaRepository.save(nuevaCarta);
 
-                if (++count % 1000 == 0) System.out.println(count + " cartas guardadas...");
+                if (++count % 100 == 0) System.out.println(count + " cartas guardadas...");
             }
             System.out.println("Importación completada. Total cartas en español: " + count);
         }
