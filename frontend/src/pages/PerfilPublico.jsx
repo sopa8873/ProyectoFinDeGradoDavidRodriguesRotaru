@@ -27,61 +27,63 @@ function PerfilPublico() {
     return (
         <div className="page-root">
             <Header />
-            <div className="container mt-5">
-                <div
-                    className="card shadow-sm p-4"
-                    style={{
-                        background: "var(--seasalt)",
-                        border: "1px solid var(--paynes-gray)",
-                        color: "var(--bole)"
-                    }}
-                >
-                    <div className="d-flex align-items-center mb-4">
-                        <img
-                            src={usuario.avatarUsuario || "/uploads/avatars/default.jpg"}
-                            alt="Avatar"
-                            className="rounded-circle me-3"
-                            width="100"
-                            height="100"
-                            style={{
-                                border: "3px solid var(--zomp)",
-                                background: "var(--bone)"
-                            }}
-                        />
-                        <div>
-                            <h2 style={{ color: "var(--paynes-gray)", fontWeight: "bold", marginBottom: 0 }}>
-                                {usuario.nombreUsuario}
-                            </h2>
+            <main>
+                <div className="container mt-5">
+                    <div
+                        className="card shadow-sm p-4"
+                        style={{
+                            background: "var(--seasalt)",
+                            border: "1px solid var(--paynes-gray)",
+                            color: "var(--bole)"
+                        }}
+                    >
+                        <div className="d-flex align-items-center mb-4">
+                            <img
+                                src={usuario.avatarUsuario || "/uploads/avatars/default.jpg"}
+                                alt="Avatar"
+                                className="rounded-circle me-3"
+                                width="100"
+                                height="100"
+                                style={{
+                                    border: "3px solid var(--zomp)",
+                                    background: "var(--bone)"
+                                }}
+                            />
+                            <div>
+                                <h2 style={{ color: "var(--paynes-gray)", fontWeight: "bold", marginBottom: 0 }}>
+                                    {usuario.nombreUsuario}
+                                </h2>
+                            </div>
                         </div>
-                    </div>
 
-                    <h4 style={{ color: "var(--zomp)", fontWeight: "bold" }}>Mazos públicos</h4>
-                    {usuario.mazos && usuario.mazos.length > 0 ? (
-                        <ul className="list-group mb-4">
-                            {usuario.mazos.map((mazo) => (
-                                <li
-                                    key={mazo.idMazo}
-                                    className="list-group-item"
-                                    style={{
-                                        background: "var(--bone)",
-                                        color: "var(--bole)",
-                                        border: "1px solid var(--zomp)",
-                                        marginBottom: "0.5rem"
-                                    }}
-                                >
-                                    <Link to={`/mazo/${mazo.idMazo}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        <strong style={{ color: "var(--paynes-gray)" }}>{mazo.nombreMazo}</strong>
-                                        {" – "}
-                                        <span style={{ color: "var(--bole)" }}>{mazo.descripcionMazo}</span>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p style={{ color: "var(--bole)" }}>Este usuario no tiene mazos públicos.</p>
-                    )}
+                        <h4 style={{ color: "var(--zomp)", fontWeight: "bold" }}>Mazos públicos</h4>
+                        {usuario.mazos && usuario.mazos.length > 0 ? (
+                            <ul className="list-group mb-4">
+                                {usuario.mazos.map((mazo) => (
+                                    <li
+                                        key={mazo.idMazo}
+                                        className="list-group-item"
+                                        style={{
+                                            background: "var(--bone)",
+                                            color: "var(--bole)",
+                                            border: "1px solid var(--zomp)",
+                                            marginBottom: "0.5rem"
+                                        }}
+                                    >
+                                        <Link to={`/mazo/${mazo.idMazo}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <strong style={{ color: "var(--paynes-gray)" }}>{mazo.nombreMazo}</strong>
+                                            {" – "}
+                                            <span style={{ color: "var(--bole)" }}>{mazo.descripcionMazo}</span>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p style={{ color: "var(--bole)" }}>Este usuario no tiene mazos públicos.</p>
+                        )}
+                    </div>
                 </div>
-            </div>
+            </main>
             <Footer />
         </div>
     );

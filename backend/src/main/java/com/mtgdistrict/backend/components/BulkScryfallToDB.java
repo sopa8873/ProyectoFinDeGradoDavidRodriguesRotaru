@@ -35,7 +35,7 @@ public class BulkScryfallToDB {
         try (InputStream input = new FileInputStream(FILE_NAME)) {
             MappingIterator<Map<String, Object>> it = mapper.readerFor(Map.class).readValues(input);
             int count = 0;
-            while (it.hasNext() && count < 100) {
+            while (it.hasNext() && count < 1000) {
                 Map<String, Object> carta = it.next();
                 if (!"es".equals(carta.get("lang"))) continue;
 

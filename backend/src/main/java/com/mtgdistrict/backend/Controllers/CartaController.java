@@ -69,4 +69,9 @@ public class CartaController {
     public ResponseEntity<?> getAllCartas() {
         return ResponseEntity.ok(cartaService.findAll());
     }
+
+    @GetMapping("/random")
+    public ResponseEntity<?> getRandomCartas(@RequestParam(defaultValue = "6") int cantidad) {
+        return ResponseEntity.ok(cartaService.findRandomCartas(cantidad));
+    }
 }

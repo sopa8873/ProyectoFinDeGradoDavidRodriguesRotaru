@@ -28,4 +28,9 @@ public class CartaService implements ICartaService {
     public List<Carta> findAll() {
         return cartaRepository.findAll();
     }
+
+    @Override
+    public List<Carta> findRandomCartas(int cantidad) {
+        return cartaRepository.findRandomCartas(cantidad);
+    }
 }
