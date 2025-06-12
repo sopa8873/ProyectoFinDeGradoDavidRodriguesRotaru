@@ -29,7 +29,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
         try {
             com.mtgdistrict.backend.models.Usuario usuario = usuarioService.findByEmail(authRequest.getEmailUsuario());
-            // Verifica la contraseña
             if (usuario == null || !passwordEncoder.matches(authRequest.getPasswordUsuario(), usuario.getPasswordUsuario())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }

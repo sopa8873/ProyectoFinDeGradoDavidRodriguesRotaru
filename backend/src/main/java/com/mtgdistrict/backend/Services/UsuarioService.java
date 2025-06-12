@@ -28,11 +28,8 @@ public class UsuarioService implements IUsuarioService {
     public Usuario getUsuarioById(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario not found with id: " + id));
-    }
-
-    @Override
+    }    @Override
     public Usuario createUsuario(Usuario usuario) {
-        // Hashea la contraseña antes de guardar
         usuario.setPasswordUsuario(passwordEncoder.encode(usuario.getPasswordUsuario()));
         return usuarioRepository.save(usuario);
     }
@@ -40,11 +37,8 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public Usuario updateUsuario(Long id, Usuario usuario) {
         Usuario existingUsuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario not found with id: " + id));
-
-        existingUsuario.setNombreUsuario(usuario.getNombreUsuario());
+                .orElseThrow(() -> new RuntimeException("Usuario not found with id: " + id));        existingUsuario.setNombreUsuario(usuario.getNombreUsuario());
         existingUsuario.setEmailUsuario(usuario.getEmailUsuario());
-        // Solo hashea si la contraseña ha cambiado
         if (!usuario.getPasswordUsuario().equals(existingUsuario.getPasswordUsuario())) {
             existingUsuario.setPasswordUsuario(passwordEncoder.encode(usuario.getPasswordUsuario()));
         }
@@ -70,20 +64,16 @@ public class UsuarioService implements IUsuarioService {
     public Usuario findByNombreUsuario(String nombreUsuario) {
         return usuarioRepository.findByNombreUsuario(nombreUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario not found with nombre: " + nombreUsuario));
-        }
-
-    public String getNombrePorEmail(String email) {
+        }    public String getNombrePorEmail(String email) {
         return usuarioRepository.findByEmailUsuario(email)
-                .map(Usuario::getNombreUsuario) // si existe, obtiene el nombre
-                .orElse(""); // si no existe, cadena vacía o null
+                .map(Usuario::getNombreUsuario)
+                .orElse("");
     }
 
     public void createUsuarioFromRegister(RegisterRequest registerRequest) {
-        Usuario usuario = new Usuario();
-        usuario.setNombreUsuario(registerRequest.getNombreUsuario());
+        Usuario usuario = new Usuario();        usuario.setNombreUsuario(registerRequest.getNombreUsuario());
         usuario.setEmailUsuario(registerRequest.getEmailUsuario());
         usuario.setPasswordUsuario(passwordEncoder.encode(registerRequest.getPasswordUsuario()));
-        // ...otros campos por defecto si quieres...
         usuarioRepository.save(usuario);
     }
 

@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/api";
 
-// Crea una instancia de axios
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
     },
 });
 
-// Interceptor para añadir el JWT a cada petición
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem("jwt");
@@ -22,7 +20,6 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Servicio personalizado usando el nombre 'axiosService'
 const axiosService = {
     get: async (endpoint) => {
         const response = await api.get(endpoint);

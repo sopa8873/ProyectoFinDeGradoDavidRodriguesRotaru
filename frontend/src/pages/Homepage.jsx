@@ -10,18 +10,13 @@ function Homepage() {
     const [showScroll, setShowScroll] = useState(false);
 
     useEffect(() => {
-        // Cartas: obtiene 6 aleatorias del backend
         axiosService.get("/cartas/random?cantidad=6")
             .then(cartas => {
                 setFeaturedCards(Array.isArray(cartas) ? cartas : []);
-            })
-            .catch(() => setFeaturedCards([]));
+            })            .catch(() => setFeaturedCards([]));
 
-        // Mazos: obtén todos y filtra en frontend
-        axiosService.get("/mazos")
-            .then(mazos => {
+        axiosService.get("/mazos")            .then(mazos => {
                 mazos = Array.isArray(mazos) ? mazos : [];
-                // Últimos modificados
                 const recientes = [...mazos]
                     .sort((a, b) => new Date(b.fechaModificacionMazo || b.fechaCreacionMazo) - new Date(a.fechaModificacionMazo || a.fechaCreacionMazo))
                     .slice(0, 5);
@@ -36,18 +31,12 @@ function Homepage() {
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    // Estilos usando variables CSS
-    const borderStyle = { borderColor: "var(--battleship-gray)" };
+    }, []);    const borderStyle = { borderColor: "var(--battleship-gray)" };
     const titleStyle = { color: "var(--van-dyke)" };
     const cardTitleStyle = { color: "var(--dim-gray)" };
     const cardTextStyle = { color: "var(--battleship-gray)" };
-    const headerBgStyle = { backgroundColor: "var(--ash-gray)", borderColor: "var(--battleship-gray)" };
+    const headerBgStyle = { backgroundColor: "var(--ash-gray)", borderColor: "var(--battleship-gray)" };    console.log("featuredCards:", featuredCards);
 
-    console.log("featuredCards:", featuredCards);
-
-    // Card de mazo reciente optimizada
     const RecentDeckCard = memo(({ mazo }) => (
         <div className="col">
             <a

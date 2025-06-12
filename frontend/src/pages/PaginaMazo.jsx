@@ -16,7 +16,6 @@ function PaginaMazo() {
     const [addSuccess, setAddSuccess] = useState("");
     const { showToast } = useToast();
 
-    // Supón que tienes el id del usuario logueado en localStorage
     const usuarioLogueadoId = localStorage.getItem("idUsuario");
 
     useEffect(() => {
@@ -46,7 +45,6 @@ function PaginaMazo() {
             showToast("Carta añadida correctamente", "success");
             setNuevaCarta("");
             setCantidad(1);
-            // Recarga el mazo para ver la carta añadida
             const res = await axiosService.get(`/mazos/${idMazo}`);
             setMazo(res);
         } catch (err) {
@@ -61,7 +59,6 @@ function PaginaMazo() {
         setLoading(true);
         try {
             await axiosService.delete(`/mazos/${idMazo}/cartas/${encodeURIComponent(nombreCarta)}`);
-            // Recarga el mazo tras borrar
             const res = await axiosService.get(`/mazos/${idMazo}`);
             setMazo(res);
             showToast("Carta eliminada", "success");
@@ -75,8 +72,7 @@ function PaginaMazo() {
     if (loading) return <Loader fullscreen />;
     if (!mazo) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>No se encontró el mazo.</div>;
 
-    // Comprueba si el usuario es dueño del mazo
-    const esDueno = usuarioLogueadoId && mazo.usuario && String(mazo.usuario.idUsuario) === String(usuarioLogueadoId);
+        const esDueno = usuarioLogueadoId && mazo.usuario && String(mazo.usuario.idUsuario) === String(usuarioLogueadoId);
     return (
         <div className="page-root" style={{
             minHeight: '100vh',

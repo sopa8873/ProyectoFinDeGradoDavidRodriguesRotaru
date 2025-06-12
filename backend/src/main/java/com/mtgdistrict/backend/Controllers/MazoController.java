@@ -48,34 +48,22 @@ public class MazoController {
         Usuario usuario = usuarioService.findByEmail(email);
         List<Mazo> mazos = mazoService.getMazosByUsuario(usuario);
         return new ResponseEntity<>(mazos, HttpStatus.OK);
-    }
-
-    // Obtener un mazo por su ID
-    @GetMapping("/{id}")
+    }    @GetMapping("/{id}")
     public ResponseEntity<Mazo> getMazoById(@PathVariable Long id) {
         Mazo mazo = mazoService.getMazoById(id);
         return new ResponseEntity<>(mazo, HttpStatus.OK);
-    }
-
-    // Crear un nuevo mazo
-    @PostMapping
+    }    @PostMapping
     public ResponseEntity<Mazo> createMazo(@RequestBody Mazo mazo, Authentication authentication) {
         String email = authentication.getName();
         Usuario usuario = usuarioService.findByEmail(email);
         mazo.setUsuario(usuario);
         Mazo nuevoMazo = mazoService.createMazo(mazo);
         return new ResponseEntity<>(nuevoMazo, HttpStatus.CREATED);
-    }
-
-    // Actualizar un mazo existente
-    @PutMapping("/{id}")
+    }    @PutMapping("/{id}")
     public ResponseEntity<Mazo> updateMazo(@PathVariable Long id, @RequestBody Mazo mazo) {
         Mazo mazoActualizado = mazoService.updateMazo(id, mazo);
         return new ResponseEntity<>(mazoActualizado, HttpStatus.OK);
-    }
-
-    // Eliminar un mazo por su ID
-    @DeleteMapping("/{id}")
+    }    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMazo(@PathVariable Long id) {
         mazoService.deleteMazo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -85,8 +73,6 @@ public class MazoController {
     public String test(@RequestBody Map<String, Object> body) {
         return "OK";
     }
-
-    // Añadir carta a un mazo
     @PostMapping("/{idMazo}/cartas")
     public ResponseEntity<?> addCartaToMazo(
             @PathVariable Long idMazo,
@@ -101,16 +87,10 @@ public class MazoController {
         if (cartaOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Carta no encontrada");
-        }
-        Carta carta = cartaOpt.get();
-
-        // Busca si ya existe la relación mazo-carta
-        MazoCarta mazoCarta = mazoCartaService.findByMazoAndCarta(mazo, carta);
-        if (mazoCarta != null) {
-            // Si ya existe, suma la cantidad
+        }        Carta carta = cartaOpt.get();
+        MazoCarta mazoCarta = mazoCartaService.findByMazoAndCarta(mazo, carta);        if (mazoCarta != null) {
             mazoCarta.setCantidad(mazoCarta.getCantidad() + request.getCantidad());
         } else {
-            // Si no existe, crea la relación
             mazoCarta = new MazoCarta();
             mazoCarta.setMazo(mazo);
             mazoCarta.setCarta(carta);
@@ -119,10 +99,7 @@ public class MazoController {
         mazoCartaService.save(mazoCarta);
 
         return ResponseEntity.ok().build();
-    }
-
-    // DTO para la petición
-    public static class AddCartaRequest {
+    }    public static class AddCartaRequest {
         private String nombreCarta;
         private int cantidad;
 

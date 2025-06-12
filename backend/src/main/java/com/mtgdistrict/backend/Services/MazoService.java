@@ -16,10 +16,8 @@ import com.mtgdistrict.backend.repositories.CartaRepository;
 public class MazoService implements IMazoService {
 
     @Autowired
-    private MazoRepository mazoRepository;
-
-    @Autowired
-    private CartaRepository cartaRepository; // o usa tu CartaService
+    private MazoRepository mazoRepository;    @Autowired
+    private CartaRepository cartaRepository;
 
     @Override
     public List<Mazo> getAllMazos() {
@@ -30,11 +28,8 @@ public class MazoService implements IMazoService {
     public Mazo getMazoById(Long id) {
         return mazoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mazo not found with id: " + id));
-    }
-
-    @Override
+    }    @Override
     public Mazo createMazo(Mazo mazo) {
-        // Buscar el comandante por nombre
         if (mazo.getComandanteMazo() != null && mazo.getComandanteMazo().getNombreCarta() != null) {
             Carta comandante = cartaRepository.findByNombreCarta(mazo.getComandanteMazo().getNombreCarta())
                 .orElse(null);
@@ -49,11 +44,9 @@ public class MazoService implements IMazoService {
                 .orElseThrow(() -> new RuntimeException("Mazo not found with id: " + id));
 
         existingMazo.setNombreMazo(mazo.getNombreMazo());
-        existingMazo.setDescripcionMazo(mazo.getDescripcionMazo());
-        existingMazo.setFormatoMazo(mazo.getFormatoMazo());
+        existingMazo.setDescripcionMazo(mazo.getDescripcionMazo());        existingMazo.setFormatoMazo(mazo.getFormatoMazo());
         existingMazo.setComandanteMazo(mazo.getComandanteMazo());
         existingMazo.setVisibilidadMazo(mazo.isVisibilidadMazo());
-        // Agrega aquí cualquier otro campo que quieras actualizar
 
         return mazoRepository.save(existingMazo);
     }

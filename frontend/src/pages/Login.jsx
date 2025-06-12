@@ -19,7 +19,7 @@ function Login() {
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
-        setLoginError("");  // Limpia error al cambiar pestaña
+        setLoginError("");
     };
 
     const handleLoginSubmit = async (e) => {
@@ -33,11 +33,10 @@ function Login() {
             });
             localStorage.setItem("jwt", data.token);
 
-            // Decodifica el token para extraer los datos
-            const decoded = jwtDecode(data.token);
+                        const decoded = jwtDecode(data.token);
             localStorage.setItem("nombreUsuario", decoded.nombreUsuario);
             localStorage.setItem("idUsuario", decoded.idUsuario);
-            localStorage.setItem("email", decoded.sub); // el email está en "sub"
+            localStorage.setItem("email", decoded.sub);
             localStorage.setItem("avatarUsuario", decoded.avatarUsuario);
 
             showToast("¡Bienvenido/a, " + decoded.nombreUsuario + "!", "success");
@@ -68,8 +67,7 @@ function Login() {
         }
     };
 
-    // Limpia el error login al cambiar inputs de login
-    const onLoginEmailChange = (e) => {
+        const onLoginEmailChange = (e) => {
         setLoginEmail(e.target.value);
         if (loginError) setLoginError("");
     };

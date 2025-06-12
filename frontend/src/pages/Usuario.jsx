@@ -7,7 +7,6 @@ import Loader from "../components/Loader";
 import axiosService from "../services/axiosService";
 
 function Usuario() {
-    // Estados para los formularios
     const [form, setForm] = useState({ nombre: "", email: "", telefono: "" });
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
@@ -207,7 +206,6 @@ function Usuario() {
 }
 
 export default Usuario;
-// Estilos extra recomendados para el rediseño (añadir a index.css):
 /*
 .usuario-bg {
   background: linear-gradient(120deg, #232b33 60%, #2e3a44 100%) !important;

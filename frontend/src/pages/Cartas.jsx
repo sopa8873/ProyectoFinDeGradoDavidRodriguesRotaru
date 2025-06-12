@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import axiosService from "../services/axiosService";
 import "../index.css";
 
-const PAGE_SIZE = 12; // Ajustado para 4 cartas por fila (3 filas completas)
+const PAGE_SIZE = 12;
 
 function Cartas() {
   const [cartas, setCartas] = useState([]);
