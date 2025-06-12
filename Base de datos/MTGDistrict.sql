@@ -19,21 +19,6 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    mazo (
-        id_mazo BIGINT AUTO_INCREMENT PRIMARY KEY,
-        id_usuario BIGINT NOT NULL,
-        nombre_mazo VARCHAR(100) NOT NULL,
-        id_comandante_mazo BIGINT DEFAULT NULL,
-        descripcion_mazo VARCHAR(255),
-        formato_mazo VARCHAR(20) NOT NULL,
-        fecha_creacion_mazo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        visibilidad_mazo TINYINT NOT NULL,
-        votaciones_positivas_mazo INT NOT NULL,
-        FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario),
-        FOREIGN KEY (comandante_mazo) REFERENCES carta (id_carta)
-    );
-
-CREATE TABLE
     carta (
         id_carta BIGINT AUTO_INCREMENT PRIMARY KEY,
         nombre_carta VARCHAR(100) NOT NULL UNIQUE,
@@ -45,6 +30,21 @@ CREATE TABLE
         imagen_art_crop_carta VARCHAR(255),
         set_carta VARCHAR(100),
         rareza_carta VARCHAR(50)
+    );
+
+CREATE TABLE
+    mazo (
+        id_mazo BIGINT AUTO_INCREMENT PRIMARY KEY,
+        id_usuario BIGINT NOT NULL,
+        nombre_mazo VARCHAR(100) NOT NULL,
+        id_comandante_mazo BIGINT DEFAULT NULL,
+        descripcion_mazo VARCHAR(255),
+        formato_mazo VARCHAR(20) NOT NULL,
+        fecha_creacion_mazo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        visibilidad_mazo TINYINT NOT NULL,
+        votaciones_positivas_mazo INT NOT NULL,
+        FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario),
+        FOREIGN KEY (id_comandante_mazo) REFERENCES carta (id_carta)
     );
 
 -- Relación N:M carta <-> color
@@ -121,15 +121,55 @@ INSERT INTO
     mazo (
         id_usuario,
         nombre_mazo,
-        comandante_mazo,
+        id_comandante_mazo,
         descripcion_mazo,
         formato_mazo,
         visibilidad_mazo,
         votaciones_positivas_mazo
     )
 VALUES
-    (1, 'Mazo1', NULL, 'primer mazo', 'Estandar', 1, 12),
-    (2, 'Mazo Laura', NULL, 'mazo control', 'Modern', 1, 25),
-    (3, 'Mazo Carlos', NULL, 'mazo agresivo', 'Legacy', 0, 7),
-    (4, 'Mazo Maria', NULL, 'mazo combo', 'Commander', 1, 32),
-    (5, 'Mazo Pedro', NULL, 'mazo burn', 'Pioneer', 1, 15);
+    (
+        1,
+        'Mazo1',
+        NULL,
+        'primer mazo',
+        'Estandar',
+        1,
+        12
+    ),
+    (
+        2,
+        'Mazo Laura',
+        NULL,
+        'mazo control',
+        'Modern',
+        1,
+        25
+    ),
+    (
+        3,
+        'Mazo Carlos',
+        NULL,
+        'mazo agresivo',
+        'Legacy',
+        0,
+        7
+    ),
+    (
+        4,
+        'Mazo Maria',
+        NULL,
+        'mazo combo',
+        'Commander',
+        1,
+        32
+    ),
+    (
+        5,
+        'Mazo Pedro',
+        NULL,
+        'mazo burn',
+        'Pioneer',
+        1,
+        15
+    );

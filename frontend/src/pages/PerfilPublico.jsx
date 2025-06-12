@@ -1,64 +1,83 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
+import { useParams, Link } from "react-router-dom";
+import axiosService from "../services/axiosService";
 
 function PerfilPublico() {
-    // Ejemplo de datos estáticos (simula lo que vendría de la API)
-    const usuario = {
-        nombre: "Juan Pérez",
-        email: "juan.perez@example.com",
-        avatarUrl: "/uploads/avatars/default.jpg",
-        mazos: [
-            { id: 1, nombre: "Mazo de fuego", descripcion: "Un mazo con cartas de fuego" },
-            { id: 2, nombre: "Mazo de agua", descripcion: "Un mazo con cartas de agua" },
-        ],
-        colecciones: [
-            { id: 1, nombre: "Colección vintage", descripcion: "Cartas antiguas y raras" },
-        ],
-    };
+    const { nombreUsuario } = useParams();
+    const [usuario, setUsuario] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axiosService.get(`/usuarios/publico/${nombreUsuario}`)
+            .then(res => {
+                setUsuario(res);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Error al cargar usuario:", err);
+                setLoading(false);
+            });
+    }, [nombreUsuario]);
+
+    if (loading) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>Cargando...</div>;
+    if (!usuario) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>No se encontró el usuario.</div>;
 
     return (
         <>
             <Header />
             <div className="container mt-5">
-                <div className="card shadow-sm p-4">
+                <div
+                    className="card shadow-sm p-4"
+                    style={{
+                        background: "var(--seasalt)",
+                        border: "1px solid var(--paynes-gray)",
+                        color: "var(--bole)"
+                    }}
+                >
                     <div className="d-flex align-items-center mb-4">
                         <img
-                            src={usuario.avatarUrl}
+                            src={usuario.avatarUsuario || "/uploads/avatars/default.jpg"}
                             alt="Avatar"
                             className="rounded-circle me-3"
                             width="100"
                             height="100"
+                            style={{
+                                border: "3px solid var(--zomp)",
+                                background: "var(--bone)"
+                            }}
                         />
                         <div>
-                            <h2>{usuario.nombre}</h2>
-                            <p className="text-muted">{usuario.email}</p>
+                            <h2 style={{ color: "var(--paynes-gray)", fontWeight: "bold", marginBottom: 0 }}>
+                                {usuario.nombreUsuario}
+                            </h2>
                         </div>
                     </div>
 
-                    <h4>Mazos públicos</h4>
+                    <h4 style={{ color: "var(--zomp)", fontWeight: "bold" }}>Mazos públicos</h4>
                     {usuario.mazos && usuario.mazos.length > 0 ? (
                         <ul className="list-group mb-4">
                             {usuario.mazos.map((mazo) => (
-                                <li key={mazo.id} className="list-group-item">
-                                    <strong>{mazo.nombre}</strong> - {mazo.descripcion}
+                                <li
+                                    key={mazo.idMazo}
+                                    className="list-group-item"
+                                    style={{
+                                        background: "var(--bone)",
+                                        color: "var(--bole)",
+                                        border: "1px solid var(--zomp)",
+                                        marginBottom: "0.5rem"
+                                    }}
+                                >
+                                    <Link to={`/mazo/${mazo.idMazo}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        <strong style={{ color: "var(--paynes-gray)" }}>{mazo.nombreMazo}</strong>
+                                        {" – "}
+                                        <span style={{ color: "var(--bole)" }}>{mazo.descripcionMazo}</span>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
                     ) : (
-                        <p>Este usuario no tiene mazos públicos.</p>
-                    )}
-
-                    <h4>Colecciones públicas</h4>
-                    {usuario.colecciones && usuario.colecciones.length > 0 ? (
-                        <ul className="list-group">
-                            {usuario.colecciones.map((coleccion) => (
-                                <li key={coleccion.id} className="list-group-item">
-                                    <strong>{coleccion.nombre}</strong> - {coleccion.descripcion}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Este usuario no tiene colecciones públicas.</p>
+                        <p style={{ color: "var(--bole)" }}>Este usuario no tiene mazos públicos.</p>
                     )}
                 </div>
             </div>

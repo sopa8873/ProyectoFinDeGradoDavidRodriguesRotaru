@@ -66,6 +66,12 @@ public class UsuarioService implements IUsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario not found with email: " + emailUsuario));
     }
 
+    @Override
+    public Usuario findByNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.findByNombreUsuario(nombreUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario not found with nombre: " + nombreUsuario));
+        }
+
     public String getNombrePorEmail(String email) {
         return usuarioRepository.findByEmailUsuario(email)
                 .map(Usuario::getNombreUsuario) // si existe, obtiene el nombre

@@ -3,12 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
     const navigate = useNavigate();
-    const email = localStorage.getItem("nombreUsuario");
+    const idUsuario = localStorage.getItem("idUsuario");
+    const nombreUsuario = localStorage.getItem("nombreUsuario");
+    const email = localStorage.getItem("email");
+    const avatarUsuario = localStorage.getItem("avatarUsuario") || "/uploads/avatars/default.jpg";
 
     const handleLogout = () => {
         localStorage.removeItem("jwt");
         localStorage.removeItem("email");
         localStorage.removeItem("nombreUsuario");
+        localStorage.removeItem("idUsuario");
+        localStorage.removeItem("avatarUsuario");
         navigate("/login");
     };
 
@@ -70,14 +75,14 @@ function Header() {
                                 style={{ color: "var(--bole)" }}
                             >
                                 <img
-                                    src="/uploads/avatars/default.jpg"
+                                    src={avatarUsuario}
                                     alt="Avatar"
                                     className="rounded-circle me-2"
                                     width="32"
                                     height="32"
                                     style={{ border: "1px solid var(--paynes-gray)" }}
                                 />
-                                {email ? email : "Usuario"}
+                                {nombreUsuario ? nombreUsuario : "Usuario"}
                             </a>
                             <ul
                                 className="dropdown-menu dropdown-menu-end"
@@ -85,7 +90,7 @@ function Header() {
                                 style={{ backgroundColor: "var(--zomp)", color: "var(--bole)" }}
                             >
                                 <li>
-                                    <Link className="dropdown-item" to={`/usuario/${email}`}>
+                                    <Link className="dropdown-item" to={`/usuario/${nombreUsuario}`}>
                                         Perfil
                                     </Link>
                                 </li>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axiosService from "../services/axiosService";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
     const [activeTab, setActiveTab] = useState("login");
@@ -21,14 +22,19 @@ function Login() {
         e.preventDefault();
         setLoginError("");
         try {
-            // Aquí NO necesitas el token, solo POST
             const data = await axiosService.post("/../auth/login", {
                 emailUsuario: loginEmail,
                 passwordUsuario: loginPassword,
             });
             localStorage.setItem("jwt", data.token);
-            localStorage.setItem("email", loginEmail);
-            localStorage.setItem("nombre", data.nombreUsuario);
+
+            // Decodifica el token para extraer los datos
+            const decoded = jwtDecode(data.token);
+            localStorage.setItem("nombreUsuario", decoded.nombreUsuario);
+            localStorage.setItem("idUsuario", decoded.idUsuario);
+            localStorage.setItem("email", decoded.sub); // el email está en "sub"
+            localStorage.setItem("avatarUsuario", decoded.avatarUsuario);
+
             window.location.href = "/";
         } catch (err) {
             setLoginError("Usuario o contraseña incorrectos");

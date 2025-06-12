@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import axiosService from "../services/axiosService";
 
@@ -32,16 +33,16 @@ function BuscarMazos() {
         e.preventDefault();
         // Filtrar mazos según inputs (mayúsculas y minúsculas ignoradas)
         const filtered = mazosData.filter((mazo) => {
-            const nombreMatch = mazo.titulo
+            const nombreMatch = mazo.nombreMazo
                 .toLowerCase()
                 .includes(nombreMazo.toLowerCase());
             const formatoMatch =
                 formato === "" || formato === "Formato"
                     ? true
-                    : mazo.formato.toLowerCase() === formato.toLowerCase();
-            const usuarioMatch = mazo.usuario
-                .toLowerCase()
-                .includes(usuario.toLowerCase());
+                    : mazo.formatoMazo.toLowerCase() === formato.toLowerCase();
+            const usuarioMatch = mazo.usuario && mazo.usuario.nombreUsuario
+                ? mazo.usuario.nombreUsuario.toLowerCase().includes(usuario.toLowerCase())
+                : false;
 
             return nombreMatch && formatoMatch && usuarioMatch;
         });
@@ -97,15 +98,24 @@ function BuscarMazos() {
                 <div className="row g-4">
                     {resultados.length > 0 ? (
                         resultados.map((mazo) => (
-                            <div key={mazo.id} className="col-12 col-md-6 col-lg-4">
-                                <div className="card deck-card h-100">
+                            <div key={mazo.idMazo} className="col-12 col-md-6 col-lg-4">
+                                <Link
+                                    to={`/mazo/${mazo.idMazo}`}
+                                    style={{ textDecoration: "none" }}
+                                    className="card deck-card h-100"
+                                >
                                     <div
                                         className="deck-card-bg"
                                         style={{ backgroundImage: `url('${mazo.imagenFondo}')` }}
                                     ></div>
                                     <div className="deck-card-content">
                                         <div>
-                                            <span className="deck-title">{mazo.titulo}</span>
+                                            <div
+                                                className="deck-title"
+                                                style={{ color: "var(--paynes-gray)", fontWeight: "bold" }}
+                                            >
+                                                {mazo.nombreMazo}
+                                            </div>
                                             <div className="deck-commander">
                                                 Commander ·{" "}
                                                 <img
@@ -136,13 +146,23 @@ function BuscarMazos() {
                                         </div>
                                         <div className="deck-footer">
                                             <span className="deck-user">
-                                                <img src={mazo.usuarioImg} alt={mazo.usuario} />
-                                                {mazo.usuario}
+                                                {mazo.usuario && mazo.usuario.avatarUsuario && (
+                                                    <img
+                                                        src={mazo.usuario.avatarUsuario}
+                                                        alt={mazo.usuario.nombreUsuario}
+                                                        style={{ width: 24, height: 24, borderRadius: "50%", marginRight: 6 }}
+                                                    />
+                                                )}
+                                                {mazo.usuario ? mazo.usuario.nombreUsuario : "Usuario desconocido"}
                                             </span>
-                                            <span>{mazo.fecha}</span>
+                                            <span>
+                                                {mazo.fechaCreacionMazo
+                                                    ? mazo.fechaCreacionMazo.split("T")[0]
+                                                    : ""}
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             </div>
                         ))
                     ) : (

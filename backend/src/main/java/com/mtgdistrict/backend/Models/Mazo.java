@@ -3,7 +3,7 @@ package com.mtgdistrict.backend.models;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -30,7 +30,7 @@ public class Mazo {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonBackReference("usuario-mazo")
+    @JsonIgnoreProperties({"mazos", "passwordUsuario", "emailUsuario"}) // Oculta solo lo que no quieres mostrar
     private Usuario usuario;
 
     @Column(nullable = false)

@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.mtgdistrict.backend.dto.DatosPublicosUsuario;
+import com.mtgdistrict.backend.models.Mazo;
 import com.mtgdistrict.backend.models.Usuario;
 import com.mtgdistrict.backend.services.IUsuarioService;
 
@@ -51,5 +53,25 @@ public class UsuarioController {
     public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         usuarioService.deleteUsuario(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Obtener un usuario por su nombre de usuario (público)
+    @GetMapping("/publico/{nombreUsuario}")
+    public ResponseEntity<DatosPublicosUsuario> getUsuarioPublico(@PathVariable String nombreUsuario) {
+        Usuario usuario = usuarioService.findByNombreUsuario(nombreUsuario);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // Filtra solo los mazos públicos (visibilidadMazo == true)
+        List<Mazo> mazosPublicos = usuario.getMazos().stream()
+            .filter(Mazo::isVisibilidadMazo)
+            .toList();
+
+        DatosPublicosUsuario dto = new DatosPublicosUsuario(
+            usuario.getNombreUsuario(),
+            usuario.getAvatarUsuario(),
+            mazosPublicos
+        );
+        return ResponseEntity.ok(dto);
     }
 }

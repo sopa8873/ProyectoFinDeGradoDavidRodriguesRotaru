@@ -26,6 +26,8 @@ public interface IUsuarioService {
     // Buscar usuario por email
     Usuario findByEmail(String emailUsuario);
 
+    Usuario findByNombreUsuario(String nombreUsuario);
+
     void createUsuarioFromRegister(RegisterRequest registerRequest);
 
     boolean changePassword(String emailUsuario, String newPassword);

@@ -6,6 +6,7 @@ import Mazos from "./pages/Mazos";
 import Usuario from "./pages/Usuario";
 import Colecciones from "./pages/Colecciones";
 import PerfilPublico from "./pages/PerfilPublico";
+import PaginaMazo from "./pages/PaginaMazo";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/mazos" element={<Mazos />} />
         <Route path="/colecciones" element={<Colecciones />} />
         <Route path="/usuario" element={<Usuario />} />
-        <Route path="/usuario/:nombre" element={<PerfilPublico />} />
+        <Route path="/usuario/:nombreUsuario" element={<PerfilPublico />} />
+        <Route path="/mazo/:idMazo" element={<PaginaMazo />} />
       </Routes>
     </BrowserRouter>
   );

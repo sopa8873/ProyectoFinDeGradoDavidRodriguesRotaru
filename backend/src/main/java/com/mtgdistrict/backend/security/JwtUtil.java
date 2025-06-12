@@ -14,10 +14,13 @@ import java.util.Map;
 public class JwtUtil {
     private final String jwtSecret = "a-string-secret-at-least-256-bits-long";
 
-    public String generateToken(String email) {
+    public String generateToken(Long idUsuario, String nombreUsuario, String email, String avatarUsuario) {
         long now = System.currentTimeMillis();
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", email);
+        claims.put("idUsuario", idUsuario);
+        claims.put("nombreUsuario", nombreUsuario);
+        claims.put("avatarUsuario", avatarUsuario); // Añadido avatar
         claims.put("iat", new Date(now));
         claims.put("exp", new Date(now + 86400000)); // 1 día
 
@@ -34,6 +37,33 @@ public class JwtUtil {
             .parseSignedClaims(token)
             .getPayload();
         return claims.get("sub", String.class);
+    }
+
+    public Long extractIdUsuario(String token) {
+        Claims claims = Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+        return claims.get("idUsuario", Long.class);
+    }
+
+    public String extractNombreUsuario(String token) {
+        Claims claims = Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+        return claims.get("nombreUsuario", String.class);
+    }
+
+    public String extractAvatarUsuario(String token) {
+        Claims claims = Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+        return claims.get("avatarUsuario", String.class);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
