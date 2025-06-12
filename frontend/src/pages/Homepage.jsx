@@ -81,32 +81,101 @@ function Homepage() {
                                     <h5 className="mb-3" style={titleStyle}>
                                         Últimos mazos modificados
                                     </h5>
-                                    <div className="row row-cols-1 g-3">
+                                    <div className="row row-cols-1 g-4">
                                         {recentDecks.length > 0 ? recentDecks.map((mazo, i) => (
                                             <div key={i} className="col">
-                                                <div className="card p-3 shadow-sm" style={headerBgStyle}>
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <span className="fw-semibold" style={cardTitleStyle}>
-                                                            {mazo.nombreMazo}
-                                                        </span>
-                                                        <small className="text-muted">
-                                                            {(mazo.fechaModificacionMazo || mazo.fechaCreacionMazo)
-                                                                ? (mazo.fechaModificacionMazo || mazo.fechaCreacionMazo).split("T")[0]
-                                                                : ""}
-                                                        </small>
+                                                <a
+                                                    href={`/mazo/${mazo.idMazo}`}
+                                                    className="deck-card h-100 text-decoration-none shadow-lg"
+                                                    style={{
+                                                        position: 'relative',
+                                                        minHeight: 180,
+                                                        borderRadius: 18,
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 6px 32px rgba(0,0,0,0.25)',
+                                                        display: 'block',
+                                                        color: 'inherit',
+                                                        background: '#181c1f',
+                                                        transition: 'transform 0.15s',
+                                                    }}
+                                                    onMouseOver={e => e.currentTarget.style.transform = 'scale(1.025)'}
+                                                    onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                                                >
+                                                    <div
+                                                        className="deck-card-bg"
+                                                        style={{
+                                                            backgroundImage: mazo.comandanteMazo?.imagenArtCropCarta
+                                                                ? `url('${mazo.comandanteMazo.imagenArtCropCarta}')`
+                                                                : `url('/pattern.png')`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                            filter: 'brightness(0.45) blur(0.5px)',
+                                                            position: 'absolute',
+                                                            inset: 0,
+                                                            zIndex: 1,
+                                                            transition: 'filter 0.2s',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        className="deck-card-content"
+                                                        style={{
+                                                            position: 'relative',
+                                                            zIndex: 2,
+                                                            padding: '1.5rem',
+                                                            height: '100%',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'flex-end',
+                                                            color: '#fff',
+                                                            textShadow: '0 2px 12px #000',
+                                                        }}
+                                                    >
+                                                        <div className="d-flex align-items-center mb-2 gap-2">
+                                                            {mazo.comandanteMazo?.imagenUrlCarta && (
+                                                                <img
+                                                                    src={mazo.comandanteMazo.imagenUrlCarta}
+                                                                    alt={mazo.comandanteMazo.nombreCarta}
+                                                                    width={38}
+                                                                    height={54}
+                                                                    className="rounded shadow"
+                                                                    style={{ border: '2px solid var(--zomp)', background: '#fff', marginRight: 8 }}
+                                                                />
+                                                            )}
+                                                            <div>
+                                                                <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--bone)' }}>{mazo.nombreMazo}</div>
+                                                                <div style={{ fontSize: 14, color: 'var(--zomp)' }}>{mazo.comandanteMazo?.nombreCarta || 'Sin comandante'}</div>
+                                                            </div>
+                                                            <span className="ms-auto badge bg-dark bg-opacity-75" style={{ fontSize: 13, fontWeight: 500 }}>
+                                                                {mazo.formatoMazo}
+                                                            </span>
+                                                        </div>
+                                                        <div style={{ fontSize: 15, color: 'var(--seasalt)', opacity: 0.95, marginBottom: 8, fontWeight: 400 }}>
+                                                            {mazo.descripcionMazo}
+                                                        </div>
+                                                        <div className="d-flex align-items-center gap-2 mt-2 deck-footer">
+                                                            <img
+                                                                src={mazo.usuario?.avatarUsuario || "/uploads/avatars/default.jpg"}
+                                                                alt={mazo.usuario?.nombreUsuario || "Usuario"}
+                                                                className="rounded-circle"
+                                                                width="32"
+                                                                height="32"
+                                                                style={{ border: "1.5px solid var(--zomp)" }}
+                                                            />
+                                                            <span style={{ color: 'var(--bone)', fontWeight: 500 }}>
+                                                                {mazo.usuario?.nombreUsuario || "Usuario"}
+                                                            </span>
+                                                            <span className="ms-auto" style={{ color: 'var(--zomp)' }}>
+                                                                <i className="bi bi-eye"></i> {mazo.vistasMazo ?? 0}
+                                                            </span>
+                                                            <span style={{ color: 'var(--bole)' }}>
+                                                                <i className="bi bi-heart-fill text-danger"></i> {mazo.votacionesPositivasMazo ?? 0}
+                                                            </span>
+                                                            <span style={{ color: '#ccc', fontSize: 13, marginLeft: 8 }}>
+                                                                {(mazo.fechaModificacionMazo || mazo.fechaCreacionMazo)?.split('T')[0]}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <div className="mt-2 d-flex align-items-center gap-2">
-                                                        <img
-                                                            src={mazo.usuario?.avatarUsuario}
-                                                            alt={mazo.usuario?.nombreUsuario}
-                                                            className="rounded-circle"
-                                                            width="32"
-                                                            height="32"
-                                                            style={{ border: "1px solid var(--battleship-gray)" }}
-                                                        />
-                                                        <span style={cardTextStyle}>{mazo.usuario?.nombreUsuario}</span>
-                                                    </div>
-                                                </div>
+                                                </a>
                                             </div>
                                         )) : <div className="text-center">No hay mazos recientes.</div>}
                                     </div>
@@ -116,33 +185,101 @@ function Homepage() {
                                     <h5 className="mb-3" style={titleStyle}>
                                         Mazos más populares
                                     </h5>
-                                    <div className="row row-cols-1 g-3">
+                                    <div className="row row-cols-1 g-4">
                                         {popularDecks.length > 0 ? popularDecks.map((mazo, i) => (
                                             <div key={i} className="col">
-                                                <div className="card p-3 shadow-sm" style={headerBgStyle}>
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <span className="fw-semibold" style={cardTitleStyle}>
-                                                            {mazo.nombreMazo}
-                                                        </span>
-                                                        <div style={{ color: "var(--dim-gray)" }}>
-                                                            <i className="bi bi-heart-fill text-danger me-2"></i>
-                                                            {mazo.votacionesPositivasMazo ?? 0}
-                                                            <i className="bi bi-eye ms-3 me-2"></i>
-                                                            {mazo.vistasMazo ?? 0}
+                                                <a
+                                                    href={`/mazo/${mazo.idMazo}`}
+                                                    className="deck-card h-100 text-decoration-none shadow-lg"
+                                                    style={{
+                                                        position: 'relative',
+                                                        minHeight: 180,
+                                                        borderRadius: 18,
+                                                        overflow: 'hidden',
+                                                        boxShadow: '0 6px 32px rgba(0,0,0,0.25)',
+                                                        display: 'block',
+                                                        color: 'inherit',
+                                                        background: '#181c1f',
+                                                        transition: 'transform 0.15s',
+                                                    }}
+                                                    onMouseOver={e => e.currentTarget.style.transform = 'scale(1.025)'}
+                                                    onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                                                >
+                                                    <div
+                                                        className="deck-card-bg"
+                                                        style={{
+                                                            backgroundImage: mazo.comandanteMazo?.imagenArtCropCarta
+                                                                ? `url('${mazo.comandanteMazo.imagenArtCropCarta}')`
+                                                                : `url('/pattern.png')`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                            filter: 'brightness(0.45) blur(0.5px)',
+                                                            position: 'absolute',
+                                                            inset: 0,
+                                                            zIndex: 1,
+                                                            transition: 'filter 0.2s',
+                                                        }}
+                                                    ></div>
+                                                    <div
+                                                        className="deck-card-content"
+                                                        style={{
+                                                            position: 'relative',
+                                                            zIndex: 2,
+                                                            padding: '1.5rem',
+                                                            height: '100%',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'flex-end',
+                                                            color: '#fff',
+                                                            textShadow: '0 2px 12px #000',
+                                                        }}
+                                                    >
+                                                        <div className="d-flex align-items-center mb-2 gap-2">
+                                                            {mazo.comandanteMazo?.imagenUrlCarta && (
+                                                                <img
+                                                                    src={mazo.comandanteMazo.imagenUrlCarta}
+                                                                    alt={mazo.comandanteMazo.nombreCarta}
+                                                                    width={38}
+                                                                    height={54}
+                                                                    className="rounded shadow"
+                                                                    style={{ border: '2px solid var(--zomp)', background: '#fff', marginRight: 8 }}
+                                                                />
+                                                            )}
+                                                            <div>
+                                                                <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--bone)' }}>{mazo.nombreMazo}</div>
+                                                                <div style={{ fontSize: 14, color: 'var(--zomp)' }}>{mazo.comandanteMazo?.nombreCarta || 'Sin comandante'}</div>
+                                                            </div>
+                                                            <span className="ms-auto badge bg-dark bg-opacity-75" style={{ fontSize: 13, fontWeight: 500 }}>
+                                                                {mazo.formatoMazo}
+                                                            </span>
+                                                        </div>
+                                                        <div style={{ fontSize: 15, color: 'var(--seasalt)', opacity: 0.95, marginBottom: 8, fontWeight: 400 }}>
+                                                            {mazo.descripcionMazo}
+                                                        </div>
+                                                        <div className="d-flex align-items-center gap-2 mt-2 deck-footer">
+                                                            <img
+                                                                src={mazo.usuario?.avatarUsuario || "/uploads/avatars/default.jpg"}
+                                                                alt={mazo.usuario?.nombreUsuario || "Usuario"}
+                                                                className="rounded-circle"
+                                                                width="32"
+                                                                height="32"
+                                                                style={{ border: "1.5px solid var(--zomp)" }}
+                                                            />
+                                                            <span style={{ color: 'var(--bone)', fontWeight: 500 }}>
+                                                                {mazo.usuario?.nombreUsuario || "Usuario"}
+                                                            </span>
+                                                            <span className="ms-auto" style={{ color: 'var(--zomp)' }}>
+                                                                <i className="bi bi-eye"></i> {mazo.vistasMazo ?? 0}
+                                                            </span>
+                                                            <span style={{ color: 'var(--bole)' }}>
+                                                                <i className="bi bi-heart-fill text-danger"></i> {mazo.votacionesPositivasMazo ?? 0}
+                                                            </span>
+                                                            <span style={{ color: '#ccc', fontSize: 13, marginLeft: 8 }}>
+                                                                {(mazo.fechaModificacionMazo || mazo.fechaCreacionMazo)?.split('T')[0]}
+                                                            </span>
                                                         </div>
                                                     </div>
-                                                    <div className="mt-2 d-flex align-items-center gap-2">
-                                                        <img
-                                                            src={mazo.usuario?.avatarUsuario}
-                                                            alt={mazo.usuario?.nombreUsuario}
-                                                            className="rounded-circle"
-                                                            width="32"
-                                                            height="32"
-                                                            style={{ border: "1px solid var(--battleship-gray)" }}
-                                                        />
-                                                        <span style={cardTextStyle}>{mazo.usuario?.nombreUsuario}</span>
-                                                    </div>
-                                                </div>
+                                                </a>
                                             </div>
                                         )) : <div className="text-center">No hay mazos populares.</div>}
                                     </div>
