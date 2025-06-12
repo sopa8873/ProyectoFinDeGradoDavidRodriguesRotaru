@@ -5,8 +5,10 @@ import com.mtgdistrict.backend.repositories.CartaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class CartaService implements ICartaService {
@@ -31,6 +33,10 @@ public class CartaService implements ICartaService {
 
     @Override
     public List<Carta> findRandomCartas(int cantidad) {
-        return cartaRepository.findRandomCartas(cantidad);
+        List<Long> allIds = cartaRepository.findAllIds();
+        if (allIds.isEmpty() || cantidad <= 0) return List.of();
+        Collections.shuffle(allIds, new Random());
+        List<Long> selectedIds = allIds.subList(0, Math.min(cantidad, allIds.size()));
+        return cartaRepository.findByIdCartaIn(selectedIds);
     }
 }

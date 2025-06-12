@@ -300,3 +300,197 @@ button:focus-visible {
   background: linear-gradient(90deg, #5f7fff 0%, #00e6ff 100%);
   box-shadow: 0 8px 32px #00e6ff77, 0 1.5px 0 #fff;
 }
+
+/* Toast styles */
+.toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.toast {
+  min-width: 220px;
+  max-width: 350px;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  background: var(--bone, #e7decd);
+  color: var(--bole, #804e49);
+  opacity: 0.97;
+  animation: toast-in 0.3s;
+}
+.toast-success { background: var(--zomp, #519e8a); color: #fff; }
+.toast-error { background: #d9534f; color: #fff; }
+.toast-info { background: var(--paynes-gray, #476a6f); color: #fff; }
+@keyframes toast-in {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 0.97; }
+}
+
+/* Loader styles */
+.loader-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(36,36,36,0.25);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader-spinner {
+  border: 5px solid var(--bone, #e7decd);
+  border-top: 5px solid var(--zomp, #519e8a);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Modal carta ampliada */
+.modal-carta-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,24,30,0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInModal 0.2s;
+}
+.modal-carta {
+  background: rgba(36,40,50,0.98);
+  border-radius: 24px;
+  padding: 2.5rem 2rem 2rem 2rem;
+  box-shadow: 0 8px 48px #000b;
+  max-width: 420px;
+  width: 95vw;
+  text-align: center;
+  position: relative;
+  animation: scaleInModal 0.18s;
+}
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleInModal {
+  from { transform: scale(0.92); opacity: 0.7; }
+  to { transform: scale(1); opacity: 1; }
+}
+.carta-hover { cursor: pointer; }
+/* Scroll to top button */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 9998;
+  background: var(--zomp);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 4px 24px #0007;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.scroll-to-top-btn:hover {
+  background: var(--bole);
+  box-shadow: 0 8px 32px #000b;
+}
+
+/* Quitar hover visual de cartas y mazos */
+.carta-hover:hover, .deck-card:hover, .usuario-glass-hover:hover {
+  transform: none !important;
+  box-shadow: inherit !important;
+}
+
+/* Ajustes para headers de configuración de usuario */
+.usuario-config-header {
+  border-radius: 18px 18px 0 0;
+  font-weight: 900;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 0;
+  letter-spacing: 1px;
+}
+.usuario-config-header-datos {
+  background: linear-gradient(90deg, var(--zomp), var(--paynes-gray));
+  color: #fff;
+}
+.usuario-config-header-pass {
+  background: linear-gradient(90deg, var(--bole), var(--paynes-gray));
+  color: #fff;
+}
+/* Ajuste para glass-card en config usuario */
+.usuario-config-card {
+  overflow: visible;
+  padding-top: 0;
+}
+
+.usuario-bg {
+  background: linear-gradient(120deg, #232b33 60%, #2e3a44 100%) !important;
+}
+.usuario-profile-card {
+  min-height: 420px;
+  border-radius: 2rem;
+  background: rgba(30,40,50,0.92);
+  box-shadow: 0 8px 32px #000b;
+}
+.usuario-avatar-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+.usuario-avatar-img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid var(--zomp);
+}
+.usuario-avatar-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,40,50,0.55);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.usuario-avatar-wrapper:hover .usuario-avatar-overlay {
+  opacity: 1;
+}
+.btn-zomp {
+  background: var(--zomp);
+  color: #fff;
+  border: none;
+}
+.btn-zomp:hover {
+  background: #1dbb8b;
+  color: #fff;
+}
+.btn-bole {
+  background: var(--bole);
+  color: #fff;
+  border: none;
+}
+.btn-bole:hover {
+  background: #a05c3b;
+  color: #fff;
+}
+.usuario-input:focus {
+  border-color: var(--zomp);
+  box-shadow: 0 0 0 0.15rem rgba(29,187,139,0.15);
+}

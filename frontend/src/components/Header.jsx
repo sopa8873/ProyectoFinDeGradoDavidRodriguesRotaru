@@ -61,6 +61,11 @@ function Header() {
                                 </li>
                             );
                         })}
+                        <li className="nav-item">
+                            <a className="nav-link" href="/cartas">
+                                <i className="bi bi-collection me-1"></i>Cartas
+                            </a>
+                        </li>
                     </ul>
 
                     <ul className="navbar-nav ms-auto">

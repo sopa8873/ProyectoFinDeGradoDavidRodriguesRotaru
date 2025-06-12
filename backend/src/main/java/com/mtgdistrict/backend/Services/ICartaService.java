@@ -10,5 +10,8 @@ public interface ICartaService {
     void save(Carta carta);
     // Otros métodos si los necesitas...
     Object findAll();
+    /**
+     * Obtiene una lista de cartas aleatorias de forma eficiente (no usa SQL RAND()).
+     */
     List<Carta> findRandomCartas(int cantidad);
 }

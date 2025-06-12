@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axiosService from "../services/axiosService";
 import { Link } from "react-router-dom";
+import { useToast } from "../components/ToastContext";
+import Loader from "../components/Loader";
 
 function Mazos() {
     const [mazos, setMazos] = useState([]);
@@ -13,6 +15,7 @@ function Mazos() {
         descripcionMazo: "",
         formatoMazo: "",
     });
+    const { showToast } = useToast();
 
     useEffect(() => {
         const fetchMazos = async () => {
@@ -31,15 +34,19 @@ function Mazos() {
 
     const handleDeleteMazo = async (idMazo) => {
         if (!window.confirm("¿Seguro que quieres borrar este mazo?")) return;
+        setLoading(true);
         try {
             await axiosService.delete(`/mazos/${idMazo}`);
             setMazos(mazos.filter(m => m.idMazo !== idMazo));
+            showToast("Mazo borrado correctamente", "success");
         } catch (err) {
-            alert("Error al borrar el mazo");
+            showToast("Error al borrar el mazo", "error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    if (loading) return <p className="m-3" style={{ color: "var(--bole)" }}>Cargando mazos...</p>;
+    if (loading) return <Loader fullscreen />;
 
     return (
         <div className="page-root" style={{
@@ -77,6 +84,7 @@ function Mazos() {
                                     <form
                                         onSubmit={async (e) => {
                                             e.preventDefault();
+                                            setLoading(true);
                                             try {
                                                 await axiosService.post("/mazos", nuevoMazo, {
                                                     headers: { "Content-Type": "application/json" }
@@ -85,8 +93,11 @@ function Mazos() {
                                                 setNuevoMazo({ nombreMazo: "", descripcionMazo: "", formatoMazo: "" });
                                                 const data = await axiosService.get("/mazos/usuario");
                                                 setMazos(Array.isArray(data) ? data : []);
+                                                showToast("Mazo creado correctamente", "success");
                                             } catch (err) {
-                                                alert("Error al crear el mazo");
+                                                showToast("Error al crear el mazo", "error");
+                                            } finally {
+                                                setLoading(false);
                                             }
                                         }}
                                     >

@@ -1,113 +1,118 @@
-import React, { useState, memo, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
-
-// Skeleton loader para el avatar
-const AvatarSkeleton = () => (
-    <div style={{
-        width: 120, height: 120, borderRadius: "50%", background: "linear-gradient(135deg,#e0e0e0 60%,#cfcfcf 100%)",
-        margin: "0 auto 1rem auto", animation: "pulse 1.2s infinite"
-    }} />
-);
-
-// Memoized avatar/profile card
-const PerfilLateral = memo(({ avatar, nombre, email }) => {
-    const [imgLoaded, setImgLoaded] = useState(false);
-    return (
-        <div className="card text-center shadow-sm">
-            <div className="card-body">
-                {!imgLoaded && <AvatarSkeleton />}
-                <img
-                    src={avatar}
-                    className="rounded-circle mb-3 avatar-img-fade"
-                    alt="Avatar"
-                    width="120"
-                    height="120"
-                    loading="lazy"
-                    style={{ display: imgLoaded ? "block" : "none", transition: "opacity 0.5s" }}
-                    onLoad={() => setImgLoaded(true)}
-                />
-                <h5 className="card-title mb-1">{nombre || "Usuario"}</h5>
-                <p className="text-muted mb-2">{email || "usuario@email.com"}</p>
-                <button type="button" className="btn btn-outline-secondary btn-sm mb-2">
-                    <i className="bi bi-upload"></i> Cambiar avatar
-                </button>
-                <div>
-                    <button type="button" className="btn btn-danger btn-sm mt-2">
-                        <i className="bi bi-trash"></i> Eliminar cuenta
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-});
+import { useToast } from "../components/ToastContext";
+import Loader from "../components/Loader";
+import axiosService from "../services/axiosService";
 
 function Usuario() {
     // Estados para los formularios
     const [form, setForm] = useState({ nombre: "", email: "", telefono: "" });
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
-
-    // Memoiza el avatar para evitar renders innecesarios
+    const [loading, setLoading] = useState(false);
+    const { showToast } = useToast();
     const avatarUrl = useMemo(() => "/uploads/avatars/default.jpg", []);
+
+    useEffect(() => {
+        setLoading(true);
+        axiosService.get("/usuario/perfil")
+            .then(data => {
+                setForm({
+                    nombre: data.nombreUsuario || "",
+                    email: data.emailUsuario || "",
+                    telefono: data.telefonoUsuario || ""
+                });
+            })
+            .catch(() => showToast("Error al cargar perfil", "error"))
+            .finally(() => setLoading(false));
+    }, []);
 
     const handleDatosChange = e => {
         const { id, value } = e.target;
         setForm(f => f[id] === value ? f : { ...f, [id]: value });
     };
 
-    const handleDatosSubmit = (e) => {
+    const handleDatosSubmit = async (e) => {
         e.preventDefault();
-        // Lógica para guardar cambios de datos personales
-        alert("Datos personales guardados (implementa la lógica aquí)");
+        setLoading(true);
+        try {
+            await axiosService.put("/usuario", form);
+            showToast("Datos personales guardados", "success");
+        } catch (err) {
+            showToast("Error al guardar los datos", "error");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handlePasswordSubmit = (e) => {
+    const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        // Lógica para cambiar contraseña
         if (password !== password2) {
-            alert("Las contraseñas no coinciden");
+            showToast("Las contraseñas no coinciden", "error");
             return;
         }
-        alert("Contraseña cambiada (implementa la lógica aquí)");
+        setLoading(true);
+        try {
+            await axiosService.put("/usuario/password", { password });
+            showToast("Contraseña cambiada correctamente", "success");
+            setPassword("");
+            setPassword2("");
+        } catch (err) {
+            showToast("Error al cambiar la contraseña", "error");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="page-root" style={{
-            minHeight: '100vh',
-            background: `linear-gradient(rgba(30,40,50,0.85),rgba(30,40,50,0.93)), url('/backgroundMagic2-opacity.jpg') center/cover no-repeat fixed`,
-            boxShadow: 'inset 0 0 120px 0 #000a',
-        }}>
+        <div className="page-root" style={{ minHeight: '100vh', background: `linear-gradient(rgba(30,40,50,0.85),rgba(30,40,50,0.93)), url('/backgroundMagic2-opacity.jpg') center/cover no-repeat fixed`, boxShadow: 'inset 0 0 120px 0 #000a', display: 'flex', flexDirection: 'column' }}>
+            {loading && <Loader fullscreen />}
             <Header />
-            <main>
-                <div className="container py-5">
-                    <div className="row justify-content-center">
-                        <div className="col-12 col-lg-10">
-                            <div className="row g-4">
-                                {/* Perfil lateral */}
-                                <div className="col-12 col-md-4">
-                                    <div className="glass-card p-4 mb-4 shadow-lg text-center usuario-glass-hover">
-                                        <PerfilLateral avatar={avatarUrl} nombre={form.nombre} email={form.email} />
+            <main style={{ flex: 1, width: '100%', padding: '40px 0' }}>
+                <div className="row justify-content-center align-items-start g-5 mx-0" style={{ width: '100%' }}>
+                    {/* Panel avatar y acciones */}
+                    <div className="col-12 col-md-4 mb-4 mb-md-0">
+                        <div className="glass-card p-4 shadow-lg text-center usuario-glass-hover" style={{ borderRadius: 24, background: 'rgba(30,40,50,0.92)', border: '2px solid var(--zomp)' }}>
+                            <div className="mb-3 d-flex flex-column align-items-center">
+                                <img
+                                    src={avatarUrl}
+                                    alt="Avatar"
+                                    width="120"
+                                    height="120"
+                                    className="rounded-circle avatar-img-fade shadow-lg"
+                                    style={{ border: '4px solid var(--zomp)', background: 'var(--bone)', objectFit: 'cover', marginBottom: 8 }}
+                                />
+                                <label htmlFor="avatar-upload" className="btn btn-outline-secondary btn-sm mb-2" style={{ borderRadius: 10, fontWeight: 600 }}>
+                                    <i className="bi bi-upload"></i> Cambiar avatar
+                                </label>
+                                <input id="avatar-upload" type="file" accept="image/*" style={{ display: 'none' }} />
+                            </div>
+                            <h5 className="mb-1" style={{ color: 'var(--bone)', fontWeight: 700 }}>{form.nombre || "Usuario"}</h5>
+                            <p className="text-muted mb-2" style={{ fontSize: 15 }}>{form.email || "usuario@email.com"}</p>
+                            <button type="button" className="btn btn-danger btn-sm mt-2" style={{ borderRadius: 10, fontWeight: 600 }}>
+                                <i className="bi bi-trash"></i> Eliminar cuenta
+                            </button>
+                        </div>
+                    </div>
+                    {/* Panel principal de edición */}
+                    <div className="col-12 col-md-8">
+                        <div className="row g-4">
+                            {/* Datos personales */}
+                            <div className="col-12">
+                                <div className="glass-card p-4 shadow-lg mb-4 usuario-glass-hover" style={{ borderRadius: 24, background: 'rgba(255,255,255,0.10)', border: '1.5px solid var(--zomp)', backdropFilter: 'blur(8px)' }}>
+                                    <div className="card-header bg-primary text-white usuario-config-header usuario-config-header-datos" style={{ borderRadius: '18px 18px 0 0', background: 'linear-gradient(90deg, var(--zomp), var(--paynes-gray))', fontWeight: 900, fontSize: '1.25rem', letterSpacing: 1 }}>
+                                        <i className="bi bi-pencil-square me-2"></i>Editar datos personales
                                     </div>
-                                </div>
-                                {/* Formulario de edición */}
-                                <div className="col-12 col-md-8">
-                                    <div className="glass-card shadow-lg mb-4 usuario-glass-hover">
-                                        <div className="card-header bg-primary text-white" style={{ borderRadius: '18px 18px 0 0', background: 'linear-gradient(90deg, var(--zomp), var(--paynes-gray))', boxShadow: '0 2px 12px #0007' }}>
-                                            <h5 className="mb-0">
-                                                <i className="bi bi-pencil-square me-2"></i>Editar datos personales
-                                            </h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <form onSubmit={handleDatosSubmit} autoComplete="off">
-                                                <div className="mb-3">
-                                                    <label htmlFor="nombre" className="form-label">
-                                                        Nombre
-                                                    </label>
+                                    <div className="card-body">
+                                        <form onSubmit={handleDatosSubmit} autoComplete="off">
+                                            <div className="row g-3">
+                                                <div className="col-12 col-md-6">
+                                                    <label htmlFor="nombre" className="form-label" style={{ color: 'var(--zomp)', fontWeight: 600 }}>Nombre</label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className="form-control usuario-input"
                                                         id="nombre"
                                                         placeholder="Tu nombre"
                                                         value={form.nombre}
@@ -115,13 +120,11 @@ function Usuario() {
                                                         style={{ borderRadius: 12, fontWeight: 600 }}
                                                     />
                                                 </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="email" className="form-label">
-                                                        Correo electrónico
-                                                    </label>
+                                                <div className="col-12 col-md-6">
+                                                    <label htmlFor="email" className="form-label" style={{ color: 'var(--zomp)', fontWeight: 600 }}>Correo electrónico</label>
                                                     <input
                                                         type="email"
-                                                        className="form-control"
+                                                        className="form-control usuario-input"
                                                         id="email"
                                                         placeholder="tucorreo@email.com"
                                                         value={form.email}
@@ -129,13 +132,11 @@ function Usuario() {
                                                         style={{ borderRadius: 12 }}
                                                     />
                                                 </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="telefono" className="form-label">
-                                                        Teléfono
-                                                    </label>
+                                                <div className="col-12 col-md-6">
+                                                    <label htmlFor="telefono" className="form-label" style={{ color: 'var(--zomp)', fontWeight: 600 }}>Teléfono</label>
                                                     <input
                                                         type="tel"
-                                                        className="form-control"
+                                                        className="form-control usuario-input"
                                                         id="telefono"
                                                         placeholder="Tu teléfono"
                                                         value={form.telefono}
@@ -143,27 +144,30 @@ function Usuario() {
                                                         style={{ borderRadius: 12 }}
                                                     />
                                                 </div>
-                                                <button type="submit" className="btn btn-primary px-4" style={{ borderRadius: 12, fontWeight: 700 }}>
-                                                    <i className="bi bi-save"></i> Guardar cambios
+                                            </div>
+                                            <div className="d-flex justify-content-end mt-4">
+                                                <button type="submit" className="btn btn-zomp px-4 fw-bold" style={{ borderRadius: 12, fontWeight: 700,  background: 'var(--zomp)', color: '#fff' }}>
+                                                    <i className="bi bi-save me-2"></i> Guardar cambios
                                                 </button>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div className="glass-card shadow-lg mt-4 usuario-glass-hover">
-                                        <div className="card-header bg-secondary text-white" style={{ borderRadius: '18px 18px 0 0', background: 'linear-gradient(90deg, var(--bole), var(--paynes-gray))', boxShadow: '0 2px 12px #0007' }}>
-                                            <h6 className="mb-0">
-                                                <i className="bi bi-key me-2"></i>Cambiar contraseña
-                                            </h6>
-                                        </div>
-                                        <div className="card-body">
-                                            <form onSubmit={handlePasswordSubmit} autoComplete="off">
-                                                <div className="mb-3">
-                                                    <label htmlFor="password" className="form-label">
-                                                        Nueva contraseña
-                                                    </label>
+                                </div>
+                            </div>
+                            {/* Cambiar contraseña */}
+                            <div className="col-12">
+                                <div className="glass-card p-4 shadow-lg usuario-glass-hover" style={{ borderRadius: 24, background: 'rgba(255,255,255,0.10)', border: '1.5px solid var(--bole)', backdropFilter: 'blur(8px)' }}>
+                                    <div className="card-header bg-secondary text-white usuario-config-header usuario-config-header-pass" style={{ borderRadius: '18px 18px 0 0', background: 'linear-gradient(90deg, var(--bole), var(--paynes-gray))', fontWeight: 900, fontSize: '1.15rem', letterSpacing: 1 }}>
+                                        <i className="bi bi-key me-2"></i>Cambiar contraseña
+                                    </div>
+                                    <div className="card-body">
+                                        <form onSubmit={handlePasswordSubmit} autoComplete="off">
+                                            <div className="row g-3">
+                                                <div className="col-12 col-md-6">
+                                                    <label htmlFor="password" className="form-label" style={{ color: 'var(--bole)', fontWeight: 600 }}>Nueva contraseña</label>
                                                     <input
                                                         type="password"
-                                                        className="form-control"
+                                                        className="form-control usuario-input"
                                                         id="password"
                                                         placeholder="Nueva contraseña"
                                                         value={password}
@@ -171,13 +175,11 @@ function Usuario() {
                                                         style={{ borderRadius: 12 }}
                                                     />
                                                 </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="password2" className="form-label">
-                                                        Repetir contraseña
-                                                    </label>
+                                                <div className="col-12 col-md-6">
+                                                    <label htmlFor="password2" className="form-label" style={{ color: 'var(--bole)', fontWeight: 600 }}>Repetir contraseña</label>
                                                     <input
                                                         type="password"
-                                                        className="form-control"
+                                                        className="form-control usuario-input"
                                                         id="password2"
                                                         placeholder="Repite la contraseña"
                                                         value={password2}
@@ -185,14 +187,15 @@ function Usuario() {
                                                         style={{ borderRadius: 12 }}
                                                     />
                                                 </div>
-                                                <button type="submit" className="btn btn-secondary px-4" style={{ borderRadius: 12, fontWeight: 700 }}>
-                                                    <i className="bi bi-key"></i> Cambiar contraseña
+                                            </div>
+                                            <div className="d-flex justify-content-end mt-4">
+                                                <button type="submit" className="btn btn-bole px-4 fw-bold" style={{ borderRadius: 12, fontWeight: 700, background: 'var(--bole)', color: '#fff' }}>        
+                                                    <i className="bi bi-key me-2"></i> Cambiar contraseña
                                                 </button>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                                {/* Fin formulario */}
                             </div>
                         </div>
                     </div>
@@ -204,20 +207,60 @@ function Usuario() {
 }
 
 export default Usuario;
-// CSS para animaciones y hover
-// Agrega esto a index.css si no existe:
+// Estilos extra recomendados para el rediseño (añadir a index.css):
 /*
-.usuario-glass-hover {
-  transition: transform 0.18s, box-shadow 0.18s;
+.usuario-bg {
+  background: linear-gradient(120deg, #232b33 60%, #2e3a44 100%) !important;
 }
-.usuario-glass-hover:hover {
-  transform: scale(1.025);
-  box-shadow: 0 12px 40px 0 rgba(31,38,135,0.45);
+.usuario-profile-card {
+  min-height: 420px;
+  border-radius: 2rem;
+  background: rgba(30,40,50,0.92);
+  box-shadow: 0 8px 32px #000b;
 }
-@keyframes pulse {
-  0% { opacity: 0.7; }
-  50% { opacity: 1; }
-  100% { opacity: 0.7; }
+.usuario-avatar-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
 }
-.avatar-img-fade { opacity: 1; transition: opacity 0.5s; }
+.usuario-avatar-img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid var(--zomp);
+}
+.usuario-avatar-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,40,50,0.55);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.usuario-avatar-wrapper:hover .usuario-avatar-overlay {
+  opacity: 1;
+}
+.btn-zomp {
+  background: var(--zomp);
+  color: #fff;
+  border: none;
+}
+.btn-zomp:hover {
+  background: #1dbb8b;
+  color: #fff;
+}
+.btn-bole {
+  background: var(--bole);
+  color: #fff;
+  border: none;
+}
+.btn-bole:hover {
+  background: #a05c3b;
+  color: #fff;
+}
+.usuario-input:focus {
+  border-color: var(--zomp);
+  box-shadow: 0 0 0 0.15rem rgba(29,187,139,0.15);
+}
 */

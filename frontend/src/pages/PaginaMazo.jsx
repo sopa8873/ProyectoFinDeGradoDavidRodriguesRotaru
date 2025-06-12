@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import axiosService from "../services/axiosService";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useToast } from "../components/ToastContext";
+import Loader from "../components/Loader";
 
 function PaginaMazo() {
     const { idMazo } = useParams();
@@ -12,6 +14,7 @@ function PaginaMazo() {
     const [cantidad, setCantidad] = useState(1);
     const [addError, setAddError] = useState("");
     const [addSuccess, setAddSuccess] = useState("");
+    const { showToast } = useToast();
 
     // Supón que tienes el id del usuario logueado en localStorage
     const usuarioLogueadoId = localStorage.getItem("idUsuario");
@@ -33,12 +36,14 @@ function PaginaMazo() {
         e.preventDefault();
         setAddError("");
         setAddSuccess("");
+        setLoading(true);
         try {
             await axiosService.post(`/mazos/${idMazo}/cartas`, {
                 nombreCarta: nuevaCarta,
                 cantidad: cantidad,
             });
             setAddSuccess("Carta añadida correctamente");
+            showToast("Carta añadida correctamente", "success");
             setNuevaCarta("");
             setCantidad(1);
             // Recarga el mazo para ver la carta añadida
@@ -46,21 +51,28 @@ function PaginaMazo() {
             setMazo(res);
         } catch (err) {
             setAddError("Error al añadir la carta");
+            showToast("Error al añadir la carta", "error");
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleDeleteCarta = async (nombreCarta) => {
+        setLoading(true);
         try {
             await axiosService.delete(`/mazos/${idMazo}/cartas/${encodeURIComponent(nombreCarta)}`);
             // Recarga el mazo tras borrar
             const res = await axiosService.get(`/mazos/${idMazo}`);
             setMazo(res);
+            showToast("Carta eliminada", "success");
         } catch (err) {
-            alert("Error al borrar la carta");
+            showToast("Error al borrar la carta", "error");
+        } finally {
+            setLoading(false);
         }
     };
 
-    if (loading) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>Cargando...</div>;
+    if (loading) return <Loader fullscreen />;
     if (!mazo) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>No se encontró el mazo.</div>;
 
     // Comprueba si el usuario es dueño del mazo

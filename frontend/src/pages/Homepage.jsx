@@ -6,6 +6,8 @@ import axiosService from "../services/axiosService";
 function Homepage() {
     const [featuredCards, setFeaturedCards] = useState([]);
     const [recentDecks, setRecentDecks] = useState([]);
+    const [modalCarta, setModalCarta] = useState(null);
+    const [showScroll, setShowScroll] = useState(false);
 
     useEffect(() => {
         // Cartas: obtiene 6 aleatorias del backend
@@ -28,6 +30,12 @@ function Homepage() {
             .catch(() => {
                 setRecentDecks([]);
             });
+
+        const handleScroll = () => {
+            setShowScroll(window.scrollY > 200);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     // Estilos usando variables CSS
@@ -56,8 +64,6 @@ function Homepage() {
                     background: '#181c1f',
                     transition: 'transform 0.15s',
                 }}
-                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.025)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
             >
                 <div
                     className="deck-card-bg"
@@ -139,6 +145,9 @@ function Homepage() {
         </div>
     ));
 
+    const handleOpenModal = (carta) => setModalCarta(carta);
+    const handleCloseModal = () => setModalCarta(null);
+
     return (
         <div className="page-root" style={{
             minHeight: '100vh',
@@ -170,23 +179,27 @@ function Homepage() {
                                 <div className="row row-cols-1 row-cols-md-3 g-4">
                                     {featuredCards.length > 0 ? featuredCards.map((carta, i) => (
                                         <div key={i} className="col d-flex justify-content-center">
-                                            <div className="card border-0 shadow-lg carta-glass" style={{
-                                                borderRadius: 18,
-                                                background: 'rgba(255,255,255,0.13)',
-                                                boxShadow: '0 4px 24px 0 rgba(31,38,135,0.25)',
-                                                backdropFilter: 'blur(4px)',
-                                                WebkitBackdropFilter: 'blur(4px)',
-                                                transition: 'transform 0.18s',
-                                                overflow: 'hidden',
-                                            }}
-                                            onMouseOver={e => e.currentTarget.style.transform = 'scale(1.045)'}
-                                            onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                                            <div
+                                                className="card border-0 shadow-lg carta-glass carta-hover"
+                                                style={{
+                                                    borderRadius: 18,
+                                                    background: 'rgba(255,255,255,0.13)',
+                                                    boxShadow: '0 4px 24px 0 rgba(31,38,135,0.25)',
+                                                    backdropFilter: 'blur(4px)',
+                                                    WebkitBackdropFilter: 'blur(4px)',
+                                                    transition: 'transform 0.18s',
+                                                    overflow: 'hidden',
+                                                    cursor: 'pointer',
+                                                }}
+                                                onClick={() => handleOpenModal(carta)}
+                                                title="Ver carta ampliada"
                                             >
                                                 <img
                                                     src={carta.imagenUrlCarta}
                                                     alt={carta.nombreCarta}
                                                     className="img-fluid rounded"
                                                     style={{ maxHeight: 320, objectFit: "contain", borderRadius: 18, border: '2px solid var(--zomp)', boxShadow: '0 2px 12px #0007' }}
+                                                    loading="lazy"
                                                 />
                                                 <div className="p-2 text-center" style={{ color: 'var(--bone)', fontWeight: 600, fontSize: 15, textShadow: '0 1px 8px #000' }}>
                                                     {carta.nombreCarta}
@@ -227,6 +240,19 @@ function Homepage() {
                 </div>
             </main>
             <Footer />
+
+            {/* Modal de carta ampliada */}
+            {modalCarta && (
+                <div className="modal-carta-backdrop" onClick={handleCloseModal}>
+                    <div className="modal-carta" onClick={e => e.stopPropagation()}>
+                        <img src={modalCarta.imagenUrlCarta} alt={modalCarta.nombreCarta} className="img-fluid rounded" style={{ maxHeight: 480, borderRadius: 18, border: '3px solid var(--zomp)', boxShadow: '0 6px 32px #000b' }} />
+                        <div className="mt-3 text-center" style={{ color: 'var(--bone)', fontWeight: 700, fontSize: 22, textShadow: '0 2px 12px #000' }}>{modalCarta.nombreCarta}</div>
+                        <button className="btn btn-outline-light mt-3" style={{ borderRadius: 12, fontWeight: 700 }} onClick={handleCloseModal}>
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

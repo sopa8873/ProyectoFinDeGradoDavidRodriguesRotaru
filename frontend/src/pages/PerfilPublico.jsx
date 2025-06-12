@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useParams, Link } from "react-router-dom";
 import axiosService from "../services/axiosService";
+import Loader from "../components/Loader";
 
 function PerfilPublico() {
     const { nombreUsuario } = useParams();
@@ -21,7 +22,7 @@ function PerfilPublico() {
             });
     }, [nombreUsuario]);
 
-    if (loading) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>Cargando...</div>;
+    if (loading) return <Loader fullscreen />;
     if (!usuario) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>No se encontró el usuario.</div>;
 
     return (

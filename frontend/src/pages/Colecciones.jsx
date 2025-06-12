@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axios from "../services/axiosService";
+import { useToast } from "../components/ToastContext";
+import Loader from "../components/Loader";
 
 function Colecciones() {
     const [colecciones, setColecciones] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { showToast } = useToast();
+    const [showForm, setShowForm] = useState(false);
+    const [nuevaColeccion, setNuevaColeccion] = useState({ nombreColeccion: "" });
 
     useEffect(() => {
         const fetchColecciones = async () => {
@@ -23,7 +28,7 @@ function Colecciones() {
         fetchColecciones();
     }, []);
 
-    if (loading) return <p className="m-3">Cargando colecciones...</p>;
+    if (loading) return <Loader fullscreen />;
 
     return (
         <div className="page-root" style={{
@@ -39,10 +44,44 @@ function Colecciones() {
                         Tus Colecciones
                     </h2>
                     <div className="d-flex justify-content-center mb-4">
-                        <button className="btn btn-lg shadow-lg" style={{ background: 'var(--zomp)', color: 'var(--seasalt)', fontWeight: 'bold', borderRadius: 18, boxShadow: '0 4px 24px #0007', letterSpacing: 1 }}>
-                            <i className="bi bi-plus-circle"></i> Añadir colección
+                        <button className="btn btn-lg shadow-lg" style={{ background: 'var(--zomp)', color: 'var(--seasalt)', fontWeight: 'bold', borderRadius: 18, boxShadow: '0 4px 24px #0007', letterSpacing: 1 }} onClick={() => setShowForm(!showForm)}>
+                            <i className="bi bi-plus-circle"></i> {showForm ? 'Cancelar' : 'Añadir colección'}
                         </button>
                     </div>
+                    {showForm && (
+                        <div className="row justify-content-center mb-5">
+                            <div className="col-12 col-md-8 col-lg-6">
+                                <div className="p-4 mb-4 shadow-lg glass-card" style={{ borderRadius: 24, background: 'rgba(255,255,255,0.13)', boxShadow: '0 8px 32px 0 rgba(31,38,135,0.37)', border: '1.5px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                                    <form onSubmit={async (e) => {
+                                        e.preventDefault();
+                                        setLoading(true);
+                                        try {
+                                            await axios.post("/colecciones", nuevaColeccion);
+                                            setShowForm(false);
+                                            setNuevaColeccion({ nombreColeccion: "" });
+                                            const data = await axios.get("/colecciones/usuario");
+                                            setColecciones(Array.isArray(data) ? data : []);
+                                            showToast("Colección creada correctamente", "success");
+                                        } catch (err) {
+                                            showToast("Error al crear la colección", "error");
+                                        } finally {
+                                            setLoading(false);
+                                        }
+                                    }}>
+                                        <input className="form-control mb-3" placeholder="Nombre de la colección" value={nuevaColeccion.nombreColeccion} onChange={e => setNuevaColeccion({ ...nuevaColeccion, nombreColeccion: e.target.value })} required style={{ borderRadius: 12, fontWeight: 600 }} />
+                                        <div className="d-flex justify-content-end gap-2">
+                                            <button className="btn btn-success px-4" type="submit" style={{ borderRadius: 12, fontWeight: 700 }}>
+                                                <i className="bi bi-check-circle"></i> Crear
+                                            </button>
+                                            <button className="btn btn-secondary px-4" type="button" style={{ borderRadius: 12 }} onClick={() => setShowForm(false)}>
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <div className="row g-4">
                         {colecciones.length === 0 && (
                             <div className="col-12 text-center text-light fs-4 mt-5">No tienes colecciones todavía.</div>
