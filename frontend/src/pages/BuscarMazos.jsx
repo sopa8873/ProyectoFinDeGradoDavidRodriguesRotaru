@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import axiosService from "../services/axiosService";
 
 function BuscarMazos() {
@@ -57,7 +56,45 @@ function BuscarMazos() {
                 <h2 className="mb-4 text-center">
                     <i className="bi bi-people me-2"></i>Mazos de la Comunidad
                 </h2>
-                {/* Barra de búsqueda eliminada */}
+                <form className="row g-3 mb-4" onSubmit={handleBuscar}>
+                    <div className="col-md-4">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Nombre del mazo..."
+                            value={nombreMazo}
+                            onChange={(e) => setNombreMazo(e.target.value)}
+                        />
+                    </div>
+                    <div className="col-md-3">
+                        <select
+                            className="form-select"
+                            value={formato}
+                            onChange={(e) => setFormato(e.target.value)}
+                        >
+                            <option value="">Formato</option>
+                            <option value="Pioneer">Pioneer</option>
+                            <option value="Modern">Modern</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Commander">Commander</option>
+                        </select>
+                    </div>
+                    <div className="col-md-3">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Usuario creador..."
+                            value={usuario}
+                            onChange={(e) => setUsuario(e.target.value)}
+                        />
+                    </div>
+                    <div className="col-md-2 d-grid">
+                        <button type="submit" className="btn btn-primary">
+                            <i className="bi bi-search"></i> Buscar
+                        </button>
+                    </div>
+                </form>
+
                 <div className="row g-4">
                     {resultados.length > 0 ? (
                         resultados.map((mazo) => (
@@ -146,7 +183,6 @@ function BuscarMazos() {
                     )}
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

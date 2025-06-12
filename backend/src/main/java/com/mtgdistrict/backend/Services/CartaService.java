@@ -1,12 +1,12 @@
 package com.mtgdistrict.backend.services;
 
-import java.util.Optional;
-
+import com.mtgdistrict.backend.models.Carta;
+import com.mtgdistrict.backend.repositories.CartaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mtgdistrict.backend.models.Carta;
-import com.mtgdistrict.backend.repositories.CartaRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartaService implements ICartaService {
@@ -22,5 +22,10 @@ public class CartaService implements ICartaService {
     @Override
     public void save(Carta carta) {
         cartaRepository.save(carta);
+    }
+
+    @Override
+    public List<Carta> findAll() {
+        return cartaRepository.findAll();
     }
 }

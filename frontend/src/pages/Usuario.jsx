@@ -27,7 +27,7 @@ function Usuario() {
     };
 
     return (
-        <>
+        <div className="page-root">
             <Header />
             <div className="container mt-5">
                 <div className="row justify-content-center">
@@ -159,7 +159,7 @@ function Usuario() {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 

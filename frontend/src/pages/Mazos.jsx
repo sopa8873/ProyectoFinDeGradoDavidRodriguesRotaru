@@ -42,7 +42,7 @@ function Mazos() {
     if (loading) return <p className="m-3" style={{ color: "var(--bole)" }}>Cargando mazos...</p>;
 
     return (
-        <>
+        <div className="page-root">
             <Header />
             <div className="container my-4">
                 <h2 className="mb-4" style={{ color: "var(--paynes-gray)", fontWeight: "bold" }}>Tus Mazos</h2>
@@ -157,7 +157,7 @@ function Mazos() {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 

@@ -41,9 +41,19 @@ function Login() {
         }
     };
 
-    const handleRegisterSubmit = (e) => {
+    const handleRegisterSubmit = async (e) => {
         e.preventDefault();
-        alert("Registro enviado (implementa la lógica aquí)");
+        try {
+            await axiosService.post("/../auth/register", {
+                nombreUsuario: registerUsername,
+                emailUsuario: registerEmail,
+                passwordUsuario: registerPassword,
+            });
+            alert("Registro exitoso, ahora puedes iniciar sesión.");
+            handleTabClick("login"); // Cambia a la pestaña de login después del registro
+        } catch (err) {
+            alert("Error en el registro, intenta nuevamente.");
+        }
     };
 
     // Limpia el error login al cambiar inputs de login
@@ -61,8 +71,8 @@ function Login() {
         <div className="bodyLogin d-flex flex-column justify-content-center align-items-center">
             <div className="row w-100">
                 <div className="col-12 text-center mb-4">
-                    <h1>MTGDistrict</h1>
-                    <h2>Bienvenido a tu aplicación de gestión de mazos</h2>
+                    <h1 className="text-white">MTGDistrict</h1>
+                    <h2 className="text-white">Bienvenido a tu aplicación de gestión de mazos</h2>
                 </div>
                 <div className="col-12 col-md-6 offset-md-3 bg-seccion p-4 rounded shadow">
                     <ul className="nav nav-pills nav-justified mb-5" id="ex1" role="tablist">

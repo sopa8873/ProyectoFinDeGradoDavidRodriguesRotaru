@@ -25,7 +25,7 @@ function PerfilPublico() {
     if (!usuario) return <div style={{ color: "var(--bole)", textAlign: "center", marginTop: "2rem" }}>No se encontró el usuario.</div>;
 
     return (
-        <>
+        <div className="page-root">
             <Header />
             <div className="container mt-5">
                 <div
@@ -83,7 +83,7 @@ function PerfilPublico() {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 

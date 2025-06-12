@@ -72,7 +72,7 @@ function Header() {
                                 role="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
-                                style={{ color: "var(--bole)" }}
+                                style={{ color: "var(--bone)" }} // Cambiado a --bone para igualar el color
                             >
                                 <img
                                     src={avatarUsuario}

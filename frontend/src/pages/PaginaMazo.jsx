@@ -69,7 +69,7 @@ function PaginaMazo() {
     console.log("Dueño del mazo ID:", mazo.usuario ? mazo.usuario.idUsuario : "N/A");
     console.log("Es dueño del mazo:", esDueno);
     return (
-        <>
+        <div className="page-root">
             <Header />
             <div className="container mt-5">
                 <div className="card shadow-sm p-4" style={{ background: "var(--seasalt)", border: "1px solid var(--paynes-gray)", color: "var(--bole)" }}>
@@ -245,7 +245,7 @@ function PaginaMazo() {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 

@@ -83,6 +83,7 @@ public class UsuarioService implements IUsuarioService {
         usuario.setNombreUsuario(registerRequest.getNombreUsuario());
         usuario.setEmailUsuario(registerRequest.getEmailUsuario());
         usuario.setPasswordUsuario(passwordEncoder.encode(registerRequest.getPasswordUsuario()));
+        // ...otros campos por defecto si quieres...
         usuarioRepository.save(usuario);
     }
 

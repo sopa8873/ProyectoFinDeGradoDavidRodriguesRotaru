@@ -8,4 +8,5 @@ public interface ICartaService {
     Optional<Carta> findByNombreCarta(String nombreCarta);
     void save(Carta carta);
     // Otros métodos si los necesitas...
+    Object findAll();
 }

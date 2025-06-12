@@ -64,4 +64,9 @@ public class CartaController {
             return ResponseEntity.status(404).body("Carta no encontrada en Scryfall");
         }
     }
+
+    @GetMapping
+    public ResponseEntity<?> getAllCartas() {
+        return ResponseEntity.ok(cartaService.findAll());
+    }
 }

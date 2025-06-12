@@ -1,76 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import axiosService from "../services/axiosService";
 
 function Homepage() {
-    // Datos hardcodeados para cartas y mazos
-    const featuredCards = [
-        {
-            img: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409741&type=card",
-        },
-        {
-            img: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409740&type=card",
-        },
-        {
-            img: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409739&type=card",
-        },
-        {
-            img: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409738&type=card",
-        },
-        {
-            img: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409737&type=card",
-        },
-        {
-            img: "https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=409745&type=card",
-        },
-        
+    const [featuredCards, setFeaturedCards] = useState([]);
+    const [recentDecks, setRecentDecks] = useState([]);
+    const [popularDecks, setPopularDecks] = useState([]);
 
-    ];
+    useEffect(() => {
+        // Cartas: obtiene todas y selecciona 6 aleatorias
+        axiosService.get("/cartas")
+            .then(res => {
+                console.log("Cartas recibidas:", res.data); // <-- ¿Aquí hay cartas?
+                let cartas = Array.isArray(res.data) ? res.data : [];
+                const aleatorias = cartas
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 6);
+                setFeaturedCards(aleatorias);
+                console.log("Cartas aleatorias:", aleatorias);
+            })
+            .catch(() => setFeaturedCards([]));
 
-    const recentDecks = [
-        {
-            name: "Mazo Rakdos Sacrifice",
-            user: "user_rakdos",
-            avatar: "https://i.pravatar.cc/32?u=rakdos",
-            lastModified: "10 minutos atrás",
-        },
-        {
-            name: "Mazo Mono Green Stompy",
-            user: "user_green",
-            avatar: "https://i.pravatar.cc/32?u=green",
-            lastModified: "20 minutos atrás",
-        },
-        {
-            name: "Mazo Azorius Control",
-            user: "user_azorius",
-            avatar: "https://i.pravatar.cc/32?u=azorius",
-            lastModified: "30 minutos atrás",
-        },
-    ];
+        // Mazos: obtén todos y filtra en frontend
+        axiosService.get("/mazos")
+            .then(res => {
+                const mazos = Array.isArray(res.data) ? res.data : [];
+                // Últimos modificados
+                const recientes = [...mazos]
+                    .sort((a, b) => new Date(b.fechaModificacionMazo || b.fechaCreacionMazo) - new Date(a.fechaModificacionMazo || a.fechaCreacionMazo))
+                    .slice(0, 5);
+                setRecentDecks(recientes);
 
-    const popularDecks = [
-        {
-            name: "Mazo Izzet Phoenix",
-            user: "user_izzet",
-            avatar: "https://i.pravatar.cc/32?u=izzet",
-            likes: 120,
-            views: 350,
-        },
-        {
-            name: "Mazo Boros Burn",
-            user: "user_boros",
-            avatar: "https://i.pravatar.cc/32?u=boros",
-            likes: 95,
-            views: 210,
-        },
-        {
-            name: "Mazo Golgari Midrange",
-            user: "user_golgari",
-            avatar: "https://i.pravatar.cc/32?u=golgari",
-            likes: 78,
-            views: 180,
-        },
-    ];
+                // Más populares
+                const populares = [...mazos]
+                    .sort((a, b) => (b.votacionesPositivasMazo ?? 0) - (a.votacionesPositivasMazo ?? 0))
+                    .slice(0, 5);
+                setPopularDecks(populares);
+            })
+            .catch(() => {
+                setRecentDecks([]);
+                setPopularDecks([]);
+            });
+    }, []);
 
     // Estilos usando variables CSS
     const borderStyle = { borderColor: "var(--battleship-gray)" };
@@ -79,25 +51,30 @@ function Homepage() {
     const cardTextStyle = { color: "var(--battleship-gray)" };
     const headerBgStyle = { backgroundColor: "var(--ash-gray)", borderColor: "var(--battleship-gray)" };
 
+    console.log("featuredCards:", featuredCards);
+
     return (
-        <>
+        <div className="page-root">
             <Header />
             <div className="container mt-5">
                 <div className="row">
-                    {/* Cartas destacadas */}
+                    {/* Cartas destacadas aleatorias */}
                     <div className="col-12 col-md-7 col-lg-8">
                         <div className="border p-4 h-100" style={borderStyle}>
                             <h4 className="mb-4 text-center" style={titleStyle}>
                                 Cartas destacadas de Magic
                             </h4>
                             <div className="row row-cols-1 row-cols-md-3 g-4">
-                                {featuredCards.map(({img}, i) => (
-                                    <div key={i} className="col">
-                                        <div className="card h-100 shadow-sm" style={headerBgStyle}>
-                                            <img src={img} className="card-img-top" alt="carta de magic"/>
-                                        </div>
+                                {featuredCards.length > 0 ? featuredCards.map((carta, i) => (
+                                    <div key={i} className="col d-flex justify-content-center">
+                                        <img
+                                            src={carta.imagenUrlCarta}
+                                            alt={carta.nombreCarta}
+                                            className="img-fluid rounded shadow-sm"
+                                            style={{ maxHeight: 320, objectFit: "contain" }}
+                                        />
                                     </div>
-                                ))}
+                                )) : <div className="text-center">No hay cartas destacadas.</div>}
                             </div>
                         </div>
                     </div>
@@ -110,29 +87,33 @@ function Homepage() {
                                     Últimos mazos modificados
                                 </h5>
                                 <div className="row row-cols-1 g-3">
-                                    {recentDecks.map(({ name, user, avatar, lastModified }, i) => (
+                                    {recentDecks.length > 0 ? recentDecks.map((mazo, i) => (
                                         <div key={i} className="col">
                                             <div className="card p-3 shadow-sm" style={headerBgStyle}>
                                                 <div className="d-flex justify-content-between align-items-center">
                                                     <span className="fw-semibold" style={cardTitleStyle}>
-                                                        {name}
+                                                        {mazo.nombreMazo}
                                                     </span>
-                                                    <small className="text-muted">{lastModified}</small>
+                                                    <small className="text-muted">
+                                                        {(mazo.fechaModificacionMazo || mazo.fechaCreacionMazo)
+                                                            ? (mazo.fechaModificacionMazo || mazo.fechaCreacionMazo).split("T")[0]
+                                                            : ""}
+                                                    </small>
                                                 </div>
                                                 <div className="mt-2 d-flex align-items-center gap-2">
                                                     <img
-                                                        src={avatar}
-                                                        alt={user}
+                                                        src={mazo.usuario?.avatarUsuario}
+                                                        alt={mazo.usuario?.nombreUsuario}
                                                         className="rounded-circle"
                                                         width="32"
                                                         height="32"
                                                         style={{ border: "1px solid var(--battleship-gray)" }}
                                                     />
-                                                    <span style={cardTextStyle}>{user}</span>
+                                                    <span style={cardTextStyle}>{mazo.usuario?.nombreUsuario}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
+                                    )) : <div className="text-center">No hay mazos recientes.</div>}
                                 </div>
                             </div>
 
@@ -141,33 +122,34 @@ function Homepage() {
                                     Mazos más populares
                                 </h5>
                                 <div className="row row-cols-1 g-3">
-                                    {popularDecks.map(({ name, user, avatar, likes, views }, i) => (
+                                    {popularDecks.length > 0 ? popularDecks.map((mazo, i) => (
                                         <div key={i} className="col">
                                             <div className="card p-3 shadow-sm" style={headerBgStyle}>
                                                 <div className="d-flex justify-content-between align-items-center">
                                                     <span className="fw-semibold" style={cardTitleStyle}>
-                                                        {name}
+                                                        {mazo.nombreMazo}
                                                     </span>
                                                     <div style={{ color: "var(--dim-gray)" }}>
                                                         <i className="bi bi-heart-fill text-danger me-2"></i>
-                                                        {likes} <i className="bi bi-eye ms-3 me-2"></i>
-                                                        {views}
+                                                        {mazo.votacionesPositivasMazo ?? 0}
+                                                        <i className="bi bi-eye ms-3 me-2"></i>
+                                                        {mazo.vistasMazo ?? 0}
                                                     </div>
                                                 </div>
                                                 <div className="mt-2 d-flex align-items-center gap-2">
                                                     <img
-                                                        src={avatar}
-                                                        alt={user}
+                                                        src={mazo.usuario?.avatarUsuario}
+                                                        alt={mazo.usuario?.nombreUsuario}
                                                         className="rounded-circle"
                                                         width="32"
                                                         height="32"
                                                         style={{ border: "1px solid var(--battleship-gray)" }}
                                                     />
-                                                    <span style={cardTextStyle}>{user}</span>
+                                                    <span style={cardTextStyle}>{mazo.usuario?.nombreUsuario}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
+                                    )) : <div className="text-center">No hay mazos populares.</div>}
                                 </div>
                             </div>
                         </div>
@@ -175,7 +157,7 @@ function Homepage() {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 
