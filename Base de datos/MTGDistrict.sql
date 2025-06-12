@@ -11,7 +11,7 @@ USE mtgdistrictdb;
 CREATE TABLE
     usuario (
         id_usuario BIGINT AUTO_INCREMENT PRIMARY KEY,
-        avatar_usuario VARCHAR(255) DEFAULT '/images/avatars/usuario123.jpg',
+        avatar_usuario VARCHAR(255) DEFAULT '/uploads/avatars/default.jpg',
         nombre_usuario VARCHAR(100) NOT NULL UNIQUE,
         email_usuario VARCHAR(100) NOT NULL UNIQUE,
         password_usuario VARCHAR(255) NOT NULL,

@@ -15,8 +15,8 @@ public class CartaService implements ICartaService {
     private CartaRepository cartaRepository;
 
     @Override
-    public Optional<Carta> findByNombreCarta(String nombre) {
-        return cartaRepository.findByNombreCarta(nombre);
+    public Optional<Carta> findByNombreCarta(String nombreCarta) {
+        return cartaRepository.findByNombreCarta(nombreCarta);
     }
 
     @Override

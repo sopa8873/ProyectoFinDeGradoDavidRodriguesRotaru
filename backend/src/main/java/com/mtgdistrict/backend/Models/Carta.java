@@ -1,5 +1,6 @@
 package com.mtgdistrict.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,5 +50,9 @@ public class Carta {
     private String rarezaCarta; // Scryfall: "rarity"
 
     // Puedes añadir más campos según lo que uses en tu app
+
+    @OneToMany(mappedBy = "carta")
+    @JsonManagedReference("carta-mazo")
+    private List<MazoCarta> mazos;
 }
 

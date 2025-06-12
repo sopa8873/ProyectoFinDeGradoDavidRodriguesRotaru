@@ -3,7 +3,6 @@ package com.mtgdistrict.backend.models;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -29,8 +28,7 @@ public class Mazo {
     private Long idMazo;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonIgnoreProperties({"mazos", "passwordUsuario", "emailUsuario"}) // Oculta solo lo que no quieres mostrar
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     @Column(nullable = false)
@@ -38,8 +36,9 @@ public class Mazo {
 
     private String descripcionMazo;
 
-    @Column(name = "comandante_mazo")
-    private String comandanteMazo; // o Long si prefieres, según tu modelo de carta
+    @ManyToOne
+    @JoinColumn(name = "id_comandante_mazo")
+    private Carta comandanteMazo;
 
     @Column(nullable = false)
     private String formatoMazo;

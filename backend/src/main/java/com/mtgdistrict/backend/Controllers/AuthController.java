@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,11 +22,17 @@ public class AuthController {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
         try {
-            // Recupera el usuario autenticado
             com.mtgdistrict.backend.models.Usuario usuario = usuarioService.findByEmail(authRequest.getEmailUsuario());
+            // Verifica la contraseña
+            if (usuario == null || !passwordEncoder.matches(authRequest.getPasswordUsuario(), usuario.getPasswordUsuario())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
             String token = jwtUtil.generateToken(
                     usuario.getIdUsuario(),
                     usuario.getNombreUsuario(),

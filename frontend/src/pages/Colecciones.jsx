@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "../services/axiosService";
 
 function Colecciones() {
@@ -65,6 +66,7 @@ function Colecciones() {
                     </table>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

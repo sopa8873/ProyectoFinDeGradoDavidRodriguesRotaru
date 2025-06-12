@@ -6,15 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mtgdistrict.backend.models.Carta;
 import com.mtgdistrict.backend.models.Mazo;
 import com.mtgdistrict.backend.models.Usuario;
 import com.mtgdistrict.backend.repositories.MazoRepository;
+import com.mtgdistrict.backend.repositories.CartaRepository;
 
 @Service
 public class MazoService implements IMazoService {
 
     @Autowired
     private MazoRepository mazoRepository;
+
+    @Autowired
+    private CartaRepository cartaRepository; // o usa tu CartaService
 
     @Override
     public List<Mazo> getAllMazos() {
@@ -29,7 +34,12 @@ public class MazoService implements IMazoService {
 
     @Override
     public Mazo createMazo(Mazo mazo) {
-        // Validations can be added here before saving
+        // Buscar el comandante por nombre
+        if (mazo.getComandanteMazo() != null && mazo.getComandanteMazo().getNombreCarta() != null) {
+            Carta comandante = cartaRepository.findByNombreCarta(mazo.getComandanteMazo().getNombreCarta())
+                .orElse(null);
+            mazo.setComandanteMazo(comandante);
+        }
         return mazoRepository.save(mazo);
     }
 
@@ -40,6 +50,11 @@ public class MazoService implements IMazoService {
 
         existingMazo.setNombreMazo(mazo.getNombreMazo());
         existingMazo.setDescripcionMazo(mazo.getDescripcionMazo());
+        existingMazo.setFormatoMazo(mazo.getFormatoMazo());
+        existingMazo.setComandanteMazo(mazo.getComandanteMazo());
+        existingMazo.setVisibilidadMazo(mazo.isVisibilidadMazo());
+        // Agrega aquí cualquier otro campo que quieras actualizar
+
         return mazoRepository.save(existingMazo);
     }
 

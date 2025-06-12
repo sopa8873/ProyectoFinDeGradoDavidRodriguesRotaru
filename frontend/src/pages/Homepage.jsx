@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Homepage() {
     // Datos hardcodeados para cartas y mazos
@@ -173,6 +174,7 @@ function Homepage() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

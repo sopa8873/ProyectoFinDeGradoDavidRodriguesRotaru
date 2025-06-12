@@ -1,5 +1,6 @@
 package com.mtgdistrict.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Usuario {
     private Long idUsuario;
 
     @Column
-    private String avatarUsuario = "/images/avatars/usuario123.jpg";
+    private String avatarUsuario = "/uploads/avatars/default.jpg";
 
     @Column(nullable = false, unique = true)
     private String nombreUsuario;
@@ -34,8 +35,8 @@ public class Usuario {
     @Column(nullable = false, insertable = false, updatable = false)
     private Timestamp fechaRegistroUsuario;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonManagedReference("usuario-mazo")
+    @OneToMany(mappedBy = "usuario")
+    @JsonBackReference("usuario-mazo")
     private List<Mazo> mazos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)

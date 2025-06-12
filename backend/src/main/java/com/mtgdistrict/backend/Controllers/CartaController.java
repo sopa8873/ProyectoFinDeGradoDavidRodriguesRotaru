@@ -23,8 +23,8 @@ public class CartaController {
     public ResponseEntity<?> buscarOCrearCarta(@RequestParam String nombre) {
         // 1. Busca en tu base de datos
         Optional<Carta> carta = cartaService.findByNombreCarta(nombre);
-        if (carta != null) {
-            return ResponseEntity.ok(carta);
+        if (carta.isPresent()) {
+            return ResponseEntity.ok(carta.get());
         }
 
         // 2. Si no existe, busca en Scryfall

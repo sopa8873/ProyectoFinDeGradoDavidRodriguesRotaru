@@ -1,10 +1,11 @@
 package com.mtgdistrict.backend.services;
 
-import java.util.Optional;
-
 import com.mtgdistrict.backend.models.Carta;
 
+import java.util.Optional;
+
 public interface ICartaService {
-    Optional<Carta> findByNombreCarta(String nombre);
+    Optional<Carta> findByNombreCarta(String nombreCarta);
     void save(Carta carta);
+    // Otros métodos si los necesitas...
 }

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axiosService from "../services/axiosService";
 import { Link } from "react-router-dom";
 
 function Mazos() {
     const [mazos, setMazos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showForm, setShowForm] = useState(false);
+    const [nuevoMazo, setNuevoMazo] = useState({
+        nombreMazo: "",
+        descripcionMazo: "",
+        formatoMazo: "",
+    });
 
     useEffect(() => {
         const fetchMazos = async () => {
@@ -22,6 +29,16 @@ function Mazos() {
         fetchMazos();
     }, []);
 
+    const handleDeleteMazo = async (idMazo) => {
+        if (!window.confirm("¿Seguro que quieres borrar este mazo?")) return;
+        try {
+            await axiosService.delete(`/mazos/${idMazo}`);
+            setMazos(mazos.filter(m => m.idMazo !== idMazo));
+        } catch (err) {
+            alert("Error al borrar el mazo");
+        }
+    };
+
     if (loading) return <p className="m-3" style={{ color: "var(--bole)" }}>Cargando mazos...</p>;
 
     return (
@@ -29,7 +46,55 @@ function Mazos() {
             <Header />
             <div className="container my-4">
                 <h2 className="mb-4" style={{ color: "var(--paynes-gray)", fontWeight: "bold" }}>Tus Mazos</h2>
-                <button className="btn mb-3" style={{ background: "var(--zomp)", color: "var(--seasalt)", fontWeight: "bold" }}>
+                {showForm && (
+                    <form
+                        className="mb-4"
+                        onSubmit={async (e) => {
+                            e.preventDefault();
+                            try {
+                                await axiosService.post("/mazos", nuevoMazo, {
+                                    headers: { "Content-Type": "application/json" }
+                                });
+                                setShowForm(false);
+                                setNuevoMazo({ nombreMazo: "", descripcionMazo: "", formatoMazo: "" });
+                                // Recarga la lista
+                                const data = await axiosService.get("/mazos/usuario");
+                                setMazos(Array.isArray(data) ? data : []);
+                            } catch (err) {
+                                alert("Error al crear el mazo");
+                            }
+                        }}
+                    >
+                        <div className="mb-2">
+                            <input
+                                className="form-control mb-2"
+                                placeholder="Nombre del mazo"
+                                value={nuevoMazo.nombreMazo}
+                                onChange={e => setNuevoMazo({ ...nuevoMazo, nombreMazo: e.target.value })}
+                                required
+                            />
+                            <input
+                                className="form-control mb-2"
+                                placeholder="Descripción"
+                                value={nuevoMazo.descripcionMazo}
+                                onChange={e => setNuevoMazo({ ...nuevoMazo, descripcionMazo: e.target.value })}
+                            />
+                            <input
+                                className="form-control mb-2"
+                                placeholder="Formato"
+                                value={nuevoMazo.formatoMazo}
+                                onChange={e => setNuevoMazo({ ...nuevoMazo, formatoMazo: e.target.value })}
+                            />
+                        </div>
+                        <button className="btn btn-success me-2" type="submit">Crear</button>
+                        <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>Cancelar</button>
+                    </form>
+                )}
+                <button
+                    className="btn mb-3"
+                    style={{ background: "var(--zomp)", color: "var(--seasalt)", fontWeight: "bold" }}
+                    onClick={() => setShowForm(true)}
+                >
                     <i className="bi bi-plus-circle"></i> Crear nuevo mazo
                 </button>
                 <div className="table-responsive">
@@ -53,7 +118,11 @@ function Mazos() {
                                     <td style={{ fontWeight: "bold", color: "var(--paynes-gray)" }}>{mazo.nombreMazo}</td>
                                     <td>{mazo.descripcionMazo}</td>
                                     <td>{mazo.formatoMazo}</td>
-                                    <td>{mazo.comandanteMazo || "—"}</td>
+                                    <td>
+                                        {mazo.comandanteMazo
+                                            ? mazo.comandanteMazo.nombreCarta || "Sin nombre"
+                                            : "—"}
+                                    </td>
                                     <td>
                                         <span style={{
                                             color: mazo.visibilidadMazo ? "var(--zomp)" : "var(--bole)",
@@ -76,6 +145,7 @@ function Mazos() {
                                         <button
                                             className="btn btn-outline-danger btn-sm"
                                             style={{ borderColor: "var(--bole)", color: "var(--bole)" }}
+                                            onClick={() => handleDeleteMazo(mazo.idMazo)}
                                         >
                                             <i className="bi bi-trash"></i> Borrar
                                         </button>
@@ -86,6 +156,7 @@ function Mazos() {
                     </table>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

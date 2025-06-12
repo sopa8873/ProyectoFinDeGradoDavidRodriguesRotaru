@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Usuario() {
     // Estados para los formularios
@@ -157,6 +158,7 @@ function Usuario() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }
